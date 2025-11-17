@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title will be set dynamically -->
+    <title>Blog Post | Epplicon Technologies</title>
+
+    <meta name="description" content="Read this article from Epplicon Technologies.">
+    <link rel="icon" href="https://i.ibb.co/Vc8SbKH3/Picsart-25-06-12-13-49-11-841.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Quill.js Snow Theme CSS (to render the post content styles) -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/advanced.css">
+    
+    <style>
+        /* --- Import main theme variables --- */
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #0a192f;
+            --background-color: #f5f7fa;
+            --surface-color: #ffffff;
+            --text-primary: #1e2a3a;
+            --text-secondary: #5a6473;
+            --border-color: #e9ecef;
+            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- Global Styles (from your main site) --- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 17px;
+        }
+        .container {
+            width: 90%;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            color: var(--secondary-color);
+            line-height: 1.3;
+        }
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+        .hidden { display: none; }
+
+        /* --- Re-using Header/Footer from your main site (basic styles) --- */
+        .main-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--secondary-color);
+        }
+        .desktop-nav { display: flex; align-items: center; }
+        .desktop-nav a {
+            text-decoration: none;
+            color: var(--text-primary);
+            margin-left: 35px;
+            font-weight: 500;
+        }
+        .desktop-nav a.contact-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 6px;
+        }
+        /* Mobile Navigation */
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 10px;
+        }
+        .mobile-nav-toggle .icon-bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            margin: 5px 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .mobile-nav-toggle.active .icon-bar:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .mobile-nav-toggle.active .icon-bar:nth-child(2) {
+            opacity: 0;
+        }
+        .mobile-nav-toggle.active .icon-bar:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 100%;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .mobile-nav.active {
+            left: 0;
+        }
+        .mobile-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin: 1.5rem 0;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .mobile-nav.active a {
+            transform: translateY(0);
+            opacity: 1;
+            transition-delay: 0.3s;
+        }
+        body.mobile-nav-active {
+            overflow: hidden;
+        }
+        .site-footer {
+            background: var(--secondary-color);
+            color: #fff;
+            padding-top: 60px;
+            margin-top: 100px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 2rem;
+            padding-bottom: 40px;
+        }
+        .footer-grid h4 { color: #fff; margin-bottom: 1rem; }
+        .footer-grid p, .footer-grid a { color: rgba(255,255,255,0.7); text-decoration: none; }
+        .footer-grid ul { list-style: none; }
+        .footer-grid li { margin-bottom: 0.5rem; }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            padding: 25px 0;
+        }
+
+        /* --- Single Post Styles --- */
+        .post-container-wrapper {
+            max-width: 800px;
+            margin: 140px auto 0 auto;
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            min-height: 300px;
+        }
+        
+        .post-feature-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            background-color: var(--border-color);
+        }
+        
+        .post-header {
+            padding: 2rem 2.5rem 1rem 2.5rem;
+        }
+        .post-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .post-category-link {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        .post-category-link:hover {
+            text-decoration: underline;
+        }
+        
+        .post-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin: 0.5rem 0;
+        }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .post-meta img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--border-color);
+        }
+        
+        /* This is the content from the rich text editor */
+        .post-content {
+            padding: 1rem 2.5rem 3rem 2.5rem;
+            font-size: 1.1rem;
+            line-height: 1.9;
+        }
+        
+        /* Styles for content rendered from Quill */
+        .post-content .ql-editor {
+            padding: 0; /* Remove Quill's default padding */
+            font-size: 1.1rem;
+        }
+        .post-content h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        .post-content h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .post-content p, .post-content li {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+        .post-content a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid rgba(13, 110, 253, 0.2);
+        }
+        .post-content a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+        .post-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            margin: 1.5rem 0;
+            padding: 0.5rem 1.5rem;
+            background: var(--background-color);
+            font-style: italic;
+        }
+        .post-content pre {
+            background: var(--secondary-color);
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+        
+        /* Author Box, Share, & Post Nav */
+        .post-footer-section {
+            padding: 2rem 2.5rem 3rem 2.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .author-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--background-color);
+            border-radius: 12px;
+        }
+        .author-box img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .author-box h4 {
+            font-size: 1.3rem;
+            margin: 0;
+        }
+        .author-box p {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0.5rem 0 0 0;
+        }
+        
+        .social-share {
+            margin-top: 2.5rem;
+            text-align: center;
+        }
+        .social-share h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        .social-share-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .social-share-links a {
+            display: inline-flex;
+            width: 50px;
+            height: 50px;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .social-share-links a:hover {
+            color: #fff;
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .post-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+        .post-nav-link {
+            text-decoration: none;
+            color: var(--text-primary);
+            max-width: 45%;
+        }
+        .post-nav-link span {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .post-nav-link h4 {
+            font-size: 1.1rem;
+            margin: 0.25rem 0 0 0;
+        }
+        .post-nav-link:hover h4 {
+            color: var(--primary-color);
+        }
+        .post-nav-link.next {
+            text-align: right;
+        }
+
+
+        /* Loading Spinner */
+        .spinner {
+            border: 5px solid rgba(0,0,0,0.1);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 10rem auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .desktop-nav { display: none; }
+            .mobile-nav-toggle { display: block; }
+        }
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .post-container-wrapper {
+                width: 100%;
+                margin-top: 100px;
+                border-radius: 0;
+            }
+            .post-header { padding: 1.5rem; }
+            .post-content { padding: 0 1.5rem 2rem 1.5rem; }
+            .post-footer-section { padding: 1.5rem; }
+            .post-feature-image img { height: 250px; }
+            .author-box {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="readingProgress" class="reading-progress"></div>
+
+    <!-- Header -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="nav-placeholder"></div>
+
+    <main id="main-content">
+        <!-- The post content will be loaded here -->
+        <div id="post-container-wrapper" class="post-container-wrapper">
+            <!-- Loading Spinner -->
+            <div id="loader" class="spinner"></div>
+            
+            <!-- Error message container -->
+            <div id="error-message" class="hidden" style="color: var(--danger-color); text-align: center; padding: 2rem;"></div>
+
+            <!-- This container will be filled by JS -->
+            <article id="post-container" class="hidden">
+                <div class="post-feature-image" id="post-image-container">
+                    <!-- Image will be here -->
+                </div>
+                <header class="post-header">
+                    <div class="post-categories" id="post-categories-list">
+                        <!-- Category links go here -->
+                    </div>
+                    <h1 id="post-title" data-reading-time></h1>
+                    <div class="post-meta" id="post-meta">
+                        <!-- Author image and name go here -->
+                    </div>
+                </header>
+                
+                <!-- This div's innerHTML will be set to the post content -->
+                <section class="post-content ql-snow">
+                    <div class="ql-editor" id="post-content-body">
+                        <!-- Post content from Firestore goes here -->
+                    </div>
+                </section>
+                
+                <!-- Post Footer: Author Box, Share, Nav -->
+                <footer class="post-footer-section">
+                
+                    <!-- Author Box -->
+                    <div class="author-box hidden" id="author-box">
+                        <img id="author-image" src="https://placehold.co/100x100/eeeeee/aaaaaa?text=?">
+                        <div>
+                            <h4>About The Author</h4>
+                            <h3 id="author-name" style="margin: 0;"></h3>
+                            <p id="author-description"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Share -->
+                    <div class="social-share" id="social-share-box">
+                        <h4>Share This Post</h4>
+                        <div class="social-share-links">
+                            <a id="share-twitter" href="#" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                            <a id="share-linkedin" href="#" target="_blank" title="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a id="share-facebook" href="#" target="_blank" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a id="share-reddit" href="#" target="_blank" title="Share on Reddit"><i class="fab fa-reddit-alien"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Post Navigation -->
+                    <nav class="post-navigation" id="post-navigation-box"></nav>
+                    
+                </footer>
+            </article>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- DOMPurify for HTML Sanitization -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc,
+            collection,
+            query,
+            where,
+            orderBy,
+            limit,
+            getDocs,
+            startAfter // **FIX:** This was missing before
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // Import our config file
+        import { firebaseConfig_DB_AUTH } from './config.js';
+
+        // --- DOM Elements ---
+        const loader = document.getElementById('loader');
+        const postContainer = document.getElementById('post-container');
+        const errorMessage = document.getElementById('error-message');
+
+        // --- App State ---
+        let db;
+        let postsCollection, authorsCollection;
+
+        /**
+         * Get the Post ID/Slug from the URL query string
+         */
+        function getPostIdentifier() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('slug');
+            if (slug) {
+                return { type: 'slug', value: slug };
+            }
+            const id = params.get('id');
+            if (id) {
+                return { type: 'id', value: id };
+            }
+            return null;
+        }
+
+        /**
+         * Main function to load the specific post
+         */
+        async function loadSinglePost() {
+            const identifier = getPostIdentifier();
+            if (!identifier) {
+                showError("No post specified.");
+                return;
+            }
+
+            try {
+                // 1. Initialize Firebase
+                const dbApp = initializeApp(firebaseConfig_DB_AUTH, "dbApp");
+                db = getFirestore(dbApp);
+                postsCollection = collection(db, 'posts');
+                authorsCollection = collection(db, 'authors');
+
+                // 2. Fetch the post
+                let postDoc;
+                let postDocSnap; // To hold the snapshot
+                
+                if (identifier.type === 'slug') {
+                    // Find post by SLUG
+                    // **FIX:** Added `where("isPublished", "==", true)` to the query
+                    const q = query(postsCollection, 
+                                    where("slug", "==", identifier.value), 
+                                    where("isPublished", "==", true), 
+                                    limit(1));
+                    const querySnapshot = await getDocs(q);
+                    if (querySnapshot.empty) {
+                        throw new Error("Post not found or is not published.");
+                    }
+                    postDoc = querySnapshot.docs[0].data();
+                    postDocSnap = querySnapshot.docs[0]; // Save the snapshot
+                } else {
+                    // Find post by ID
+                    const docRef = doc(db, "posts", identifier.value);
+                    const docSnap = await getDoc(docRef);
+                    if (!docSnap.exists()) {
+                        throw new Error("Post not found.");
+                    }
+                    postDoc = docSnap.data();
+                    postDocSnap = docSnap; // Save the snapshot
+                }
+                
+                // 3. Draft/Publish Check (This is now partially handled by the slug query)
+                // But we keep it for ID-based lookups
+                if (!postDoc.isPublished) {
+                    throw new Error("This post is currently a draft and not available to view.");
+                }
+
+                // 4. Render the post, then fetch related data
+                renderPost(postDoc);
+                
+                // 5. Fetch Author & Next/Prev Posts in parallel
+                await Promise.all([
+                    loadAuthor(postDoc.authorId),
+                    setupSocialSharing(postDoc),
+                    loadPrevNextPosts(postDocSnap) // Pass the full snapshot
+                ]);
+
+            } catch (error) {
+                console.error("Error fetching post:", error);
+                // Check for "Missing Index" error
+                if (error.code === 'failed-precondition') {
+                     showError(`<b>Firestore Error:</b> The required index for finding posts by slug is missing.<br>
+                     <small>Please open the developer console (F12), find the error, and click the link to create the index.</small>`);
+                     console.error("Firestore Index Error: Click the link in the following error message to create the index:", error.message);
+                } else {
+                    showError(error.message);
+                }
+            }
+        }
+
+        /**
+         * Injects the post data into the HTML
+         */
+        function renderPost(post) {
+            // Set browser title and meta description
+            document.title = post.title + " | Epplicon Technologies";
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if(metaDesc) metaDesc.setAttribute('content', post.excerpt);
+            
+            // Set categories (sanitized)
+            const categoriesContainer = document.getElementById('post-categories-list');
+            categoriesContainer.innerHTML = ''; // Clear
+            if (post.categoryNames && post.categoryNames.length > 0) {
+                post.categoryNames.forEach((name, index) => {
+                    const slug = post.categorySlugs[index] || '';
+                    const link = document.createElement('a');
+                    link.href = `blog.html?category=${DOMPurify.sanitize(slug)}`;
+                    link.className = 'post-category-link';
+                    link.textContent = DOMPurify.sanitize(name);
+                    categoriesContainer.appendChild(link);
+                });
+            }
+            
+            // Set title (sanitized)
+            document.getElementById('post-title').textContent = DOMPurify.sanitize(post.title);
+            
+            // Set meta (date)
+            const postDate = post.createdAt ? new Date(post.createdAt.seconds * 1000).toLocaleDateString() : '';
+            document.getElementById('post-meta').innerHTML = `
+                <img id="meta-author-image" src="https://placehold.co/40x40/eeeeee/aaaaaa?text=?">
+                <span>By <strong id="meta-author-name">...</strong> on ${postDate}</span>
+            `;
+            
+            // Set image (sanitized)
+            const imgContainer = document.getElementById('post-image-container');
+            if (post.featureImage) {
+                const sanitizedImageUrl = DOMPurify.sanitize(post.featureImage);
+                const sanitizedImageAlt = DOMPurify.sanitize(post.title);
+                imgContainer.innerHTML = `<img src="${sanitizedImageUrl}" alt="${sanitizedImageAlt}">`;
+            } else {
+                imgContainer.remove(); // Remove image block if none
+            }
+
+            // Sanitize and inject the rich text HTML content
+            const sanitizedContent = DOMPurify.sanitize(post.content, {
+                ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a', 'blockquote', 'pre', 'code', 'img'],
+                ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id']
+            });
+            document.getElementById('post-content-body').innerHTML = sanitizedContent;
+
+            // Show the content
+            loader.style.display = 'none';
+            postContainer.classList.remove('hidden');
+            
+            // Trigger reading time calculation after content is loaded
+            if (window.calculateReadingTime) {
+                setTimeout(() => {
+                    const readingTimeElements = document.querySelectorAll('[data-reading-time]');
+                    readingTimeElements.forEach(element => {
+                        const content = document.getElementById('post-content-body').textContent || '';
+                        const words = content.trim().split(/\s+/).length;
+                        const readingTime = Math.ceil(words / 200);
+                        
+                        const badge = document.createElement('span');
+                        badge.className = 'reading-time';
+                        badge.innerHTML = `<i class="fas fa-clock"></i> ${readingTime} min read`;
+                        
+                        const metaContainer = document.getElementById('post-meta');
+                        if (metaContainer) {
+                            metaContainer.appendChild(badge);
+                        }
+                    });
+                }, 100);
+            }
+        }
+        
+        /**
+         * Fetches and displays the author's profile
+         */
+        async function loadAuthor(authorId) {
+            if (!authorId) return;
+            try {
+                const authorRef = doc(db, 'authors', authorId);
+                const docSnap = await getDoc(authorRef);
+                
+                if (docSnap.exists()) {
+                    const author = docSnap.data();
+                    
+                    // Update header meta
+                    document.getElementById('meta-author-name').textContent = author.name || 'Epplicon Team';
+                    if (author.image) {
+                        document.getElementById('meta-author-image').src = author.image;
+                    }
+                    
+                    // Fill in "About the Author" box
+                    document.getElementById('author-name').textContent = author.name || 'Epplicon Team';
+                    document.getElementById('author-description').textContent = author.description || '';
+                    if (author.image) {
+                        document.getElementById('author-image').src = author.image;
+                    }
+                    document.getElementById('author-box').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Error loading author:", error);
+            }
+        }
+        
+        /**
+         * Sets up the social sharing links
+         */
+        function setupSocialSharing(post) {
+            const url = window.location.href;
+            const title = encodeURIComponent(post.title);
+            
+            document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            document.getElementById('share-linkedin').href = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`;
+            document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            document.getElementById('share-reddit').href = `https://www.reddit.com/submit?url=${url}&title=${title}`;
+        }
+        
+        /**
+         * Fetches the previous and next posts
+         * @param {DocumentSnapshot} currentPostSnap - The snapshot of the current post.
+         */
+        async function loadPrevNextPosts(currentPostSnap) {
+            if (!currentPostSnap) return;
+            
+            try {
+                // Get Previous Post (older)
+                const prevQuery = query(postsCollection,
+                    where("isPublished", "==", true),
+                    orderBy("createdAt", "desc"),
+                    startAfter(currentPostSnap), // Start *after* the current post
+                    limit(1)
+                );
+                
+                // Get Next Post (newer)
+                const nextQuery = query(postsCollection,
+                    where("isPublished", "==", true),
+                    orderBy("createdAt", "asc"), // Sort ascending
+                    startAfter(currentPostSnap), // Start *after* the current post
+                    limit(1)
+                );
+                
+                const [prevSnapshot, nextSnapshot] = await Promise.all([
+                    getDocs(prevQuery),
+                    getDocs(nextQuery)
+                ]);
+                
+                let navHtml = '';
+                
+                // Render Previous Post
+                if (!prevSnapshot.empty) {
+                    const prevPost = prevSnapshot.docs[0].data();
+                    const prevId = prevSnapshot.docs[0].id;
+                    const prevLink = `post.html?slug=${prevPost.slug || prevId}`;
+                    navHtml += `
+                        <a href="${prevLink}" class="post-nav-link prev">
+                            <span>Previous Post</span>
+                            <h4>${prevPost.title}</h4>
+                        </a>
+                    `;
+                }
+                
+                // Render Next Post
+                if (!nextSnapshot.empty) {
+                    const nextPost = nextSnapshot.docs[0].data();
+                    const nextId = nextSnapshot.docs[0].id;
+                    const nextLink = `post.html?slug=${nextPost.slug || nextId}`;
+                    navHtml += `
+                        <a href="${nextLink}" class="post-nav-link next">
+                            <span>Next Post</span>
+                            <h4>${nextPost.title}</h4>
+                        </a>
+                    `;
+                }
+                
+                document.getElementById('post-navigation-box').innerHTML = navHtml;
+                
+            } catch (error) {
+                 console.error("Error fetching next/prev posts:", error);
+                 // This will fail without an index
+                 if (error.code === 'failed-precondition') {
+                     console.error("Firestore Index Error: Next/Prev post links require a new index. Please check the console error for a link to create it.", error.message);
+                 }
+            }
+        }
+
+        /**
+         * Shows a friendly error message
+         */
+        function showError(message) {
+            loader.style.display = 'none';
+            errorMessage.classList.remove('hidden');
+            errorMessage.innerHTML = message;
+        }
+
+        // ---
+        // 0. START THE APPLICATION
+        // ---
+        loadSinglePost();
+
+    </script>
+
+    <!-- External JavaScript -->
+    <script src="assets/js/nav-footer.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/animations.js"></script>
+    <script src="assets/js/advanced.js"></script>
+</body>
+</html>

@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services | Epplicon Technologies</title>
+
+    <meta name="description" content="Explore the core services offered by Epplicon Technologies, including Full-Stack Development, Cloud & DevOps, and UI/UX & Product Design. See our packages and find the right fit for your project.">
+    <meta name="keywords" content="Services, Packages, Full-Stack Development, Cloud Solutions, DevOps, UI/UX Design, Epplicon Technologies">
+    <meta name="author" content="Sahabaj Alam, Epplicon Technologies">
+    <meta name="copyright" content="Epplicon Technologies 2025">
+    <link rel="canonical" href="https://www.epplicon.net/services.html">
+
+    <meta property="og:title" content="Our Services | Epplicon Technologies">
+    <meta property="og:description" content="Detailed overview of our development, cloud, and design services.">
+    <meta property="og:image" content="https://i.ibb.co/cqX8kcg/Picsart-25-06-10-23-41-06-490.jpg">
+    <meta property="og:url" content="https://www.epplicon.net/services.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Epplicon Technologies">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Our Services | Epplicon Technologies">
+    <meta name="twitter:description" content="Detailed overview of our development, cloud, and design services.">
+    <meta name="twitter:image" content="https://i.ibb.co/cqX8kcg/Picsart-25-06-10-23-41-06-490.jpg">
+    
+    <link rel="icon" href="https://i.ibb.co/Vc8SbKH3/Picsart-25-06-12-13-49-11-841.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/advanced.css">
+    <link rel="stylesheet" href="assets/css/interactive.css">
+    
+    <style>
+/* --- NEW STYLES FOR SERVICES PAGE --- */
+      /* --- THEME & CONFIGURATION --- */
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #0a192f;
+    --background-color: #f5f7fa;
+    --surface-color: #ffffff;
+    --text-primary: #1e2a3a;
+    --text-secondary: #5a6473;
+    --border-color: #e9ecef;
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.1);
+    --transition-fast: all 0.2s ease-in-out;
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --- GLOBAL STYLES --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.8;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+body.mobile-nav-active {
+    overflow: hidden;
+}
+
+.container {
+    width: 90%;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+section {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden; /* Prevents unwanted scrollbars during animation */
+}
+section:last-of-type {
+    border-bottom: none;
+}
+#work, #about {
+    background-color: var(--surface-color);
+}
+
+
+/* --- PRELOADER --- */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    visibility: visible;
+    opacity: 1;
+}
+
+#preloader.loaded {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- ENHANCED FADE ANIMATIONS --- */
+[data-animation="fade-up"] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+[data-animation="fade-up"].visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* --- TYPOGRAPHY & HEADINGS --- */
+h1, h2, h3, h4 {
+    font-weight: 700;
+    color: var(--secondary-color);
+    line-height: 1.3;
+}
+h1 {
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 800;
+}
+h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+}
+h3 {
+    font-size: 1.6rem;
+}
+p {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+.section-header .subtitle {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+/* --- REUSABLE COMPONENTS --- */
+.btn {
+    display: inline-block;
+    padding: 14px 35px;
+    background-image: linear-gradient(45deg, var(--primary-color) 0%, #0056b3 100%);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    transition: var(--transition-fast);
+    box-shadow: 0 4px 20px rgba(13, 110, 253, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0.8s, opacity 0.8s;
+    z-index: -1;
+}
+
+.btn:active::after {
+    transform: translate(-50%, -50%) scale(100);
+    opacity: 1;
+    transition: transform 0s, opacity 0s;
+}
+
+/* --- HEADER & NAVIGATION --- */
+.main-header {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: var(--transition-fast);
+}
+.header-scrolled {
+    box-shadow: var(--shadow-sm);
+    background: rgba(255, 255, 255, 0.95);
+}
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 2rem;
+    font-weight: 800;
+    text-decoration: none;
+    color: var(--secondary-color);
+}
+.desktop-nav {
+    display: flex;
+    align-items: center;
+}
+.desktop-nav a {
+    text-decoration: none;
+    color: var(--text-primary);
+    margin-left: 35px;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+.desktop-nav a:hover, .desktop-nav a.active {
+    color: var(--primary-color);
+}
+.desktop-nav .contact-btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 6px;
+}
+.desktop-nav .contact-btn:hover {
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* --- MOBILE NAVIGATION --- */
+.mobile-nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 10px;
+}
+.mobile-nav-toggle .icon-bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--secondary-color);
+    margin: 5px 0;
+    transition: var(--transition-smooth);
+}
+.mobile-nav-toggle.active .icon-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.mobile-nav-toggle.active .icon-bar:nth-child(2) {
+    opacity: 0;
+}
+.mobile-nav-toggle.active .icon-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(10, 25, 47, 0.95);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.mobile-nav.active {
+    left: 0;
+}
+.mobile-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin: 1.5rem 0;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.mobile-nav.active a {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.3s;
+}
+
+/* --- HERO SECTION --- */
+.hero {
+    padding-top: 160px;
+    padding-bottom: 120px;
+}
+.hero .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+}
+.hero-text {
+    flex-basis: 60%;
+}
+.hero-text .hero-description {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 1.5rem 0 2.5rem 0;
+}
+.hero-image-wrapper {
+    flex-basis: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hero-visual {
+    width: clamp(280px, 80vw, 380px);
+    height: clamp(280px, 80vw, 380px);
+    background-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    animation: morph 8s ease-in-out infinite, rotate 20s linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: clamp(8rem, 25vw, 10rem);
+    font-weight: 800;
+}
+@keyframes morph {
+    0% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+    50% {
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+    }
+    100% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    }
+}
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- SERVICES SECTION --- */
+#services {
+    background-color: var(--surface-color);
+}
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+.service-card {
+    background: var(--background-color);
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    text-align: left;
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-sm);
+}
+.service-card:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+.service-card .icon {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    background-image: linear-gradient(45deg, var(--primary-color), #0056b3);
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+.service-card:hover .icon {
+    transform: rotate(15deg) scale(1.1);
+    box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
+}
+
+/* --- OUR WORK SECTION --- */
+.work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+.work-card {
+    background: var(--background-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-smooth);
+    border: 1px solid var(--border-color);
+}
+.work-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-md);
+}
+.work-card-image {
+    height: 250px;
+    overflow: hidden;
+}
+.work-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease-in-out;
+}
+.work-card:hover .work-card-image img {
+    transform: scale(1.05);
+}
+.work-card-content {
+    padding: 25px;
+}
+.work-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.work-tag {
+    background: #e9ecef;
+    color: var(--text-secondary);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+.work-card:hover .work-tag {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* --- ABOUT (Founder) SECTION --- */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 4rem;
+}
+.about-founder-image {
+    text-align: center;
+}
+.about-founder-image img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 10px solid var(--background-color);
+    box-shadow: var(--shadow-md);
+}
+.about-founder-image h4 {
+    margin-top: 1.5rem;
+    font-size: 1.5rem;
+}
+.about-founder-image p {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+    
+/* --- Add this for the founders layout --- */
+.founders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    margin-top: 60px;
+}
+
+/* --- CALL TO ACTION --- */
+.cta-section {
+    background-image: linear-gradient(45deg, var(--secondary-color), #1c2e4c);
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+}
+.cta-section h2, .cta-section p {
+    color: #fff;
+}
+.cta-section h2 {
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+}
+.cta-section p {
+    max-width: 600px;
+    margin: 0 auto 2.5rem auto;
+    opacity: 0.8;
+}
+
+/* --- FOOTER --- */
+.site-footer {
+    background: var(--secondary-color);
+    color: #fff;
+    padding-top: 60px;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 2rem;
+    padding-bottom: 40px;
+}
+.footer-grid h4 {
+    color: #fff;
+    margin-bottom: 1rem;
+}
+.footer-grid p, .footer-grid a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+.footer-grid a:hover {
+    color: #fff;
+}
+.footer-grid ul {
+    list-style: none;
+}
+.footer-grid li {
+    margin-bottom: 0.5rem;
+}
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    padding: 25px 0;
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 992px) {
+    .desktop-nav {
+        display: none;
+    }
+    .mobile-nav-toggle {
+        display: block;
+    }
+    .hero .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .about-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .hero-text {
+        order: 2;
+    }
+    .hero-image-wrapper {
+        order: 1;
+        margin-bottom: 3rem;
+    }
+    .about-founder-image {
+        order: 1;
+        margin-bottom: 3rem;
+    }
+    .about-text {
+        order: 2;
+    }
+    .section-header, .about-text {
+        text-align: center;
+    }
+}
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+    .about-founder-image img {
+        width: 240px;
+        height: 240px;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+/* --- Page Header --- */
+.page-header {
+    text-align: center;
+    padding-top: 160px;
+    padding-bottom: 120px;
+}
+.page-header .hero-text {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* --- Detailed Service Item Layout --- */
+.service-detail-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 100px;
+}
+.service-detail-item:last-child {
+    margin-bottom: 0;
+}
+/* Alternating layout */
+.service-detail-item:nth-child(even) .service-detail-image {
+    order: 2;
+}
+.service-detail-image img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    object-fit: cover;
+}
+.service-detail-content h2 {
+    margin-bottom: 1rem;
+}
+.service-detail-content ul {
+    list-style: none;
+    margin-top: 1.5rem;
+}
+.service-detail-content ul li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 0.8rem;
+    color: var(--text-secondary);
+}
+.service-detail-content ul li::before {
+    content: '\f058'; /* Font Awesome check-circle icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: var(--primary-color);
+    position: absolute;
+    left: 0;
+    top: 2px;
+}
+
+/* --- Pricing Section --- */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 60px;
+}
+.pricing-card {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+.pricing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-md);
+}
+.pricing-card.popular {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+.pricing-card.popular:hover {
+    transform: scale(1.05) translateY(-10px);
+}
+.popular-badge {
+    position: absolute;
+    top: 20px;
+    right: -45px;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 5px 40px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transform: rotate(45deg);
+}
+.pricing-header h3 {
+    font-size: 1.8rem;
+}
+.pricing-price {
+    margin: 2rem 0;
+}
+.pricing-price h4 {
+    font-weight: 400;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+.pricing-price span {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+.pricing-features {
+    list-style: none;
+    margin-bottom: 2.5rem;
+}
+.pricing-features li {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+.pricing-footer .btn {
+    width: 100%;
+}
+
+/* --- Responsive adjustments for new sections --- */
+@media (max-width: 992px) {
+    .service-detail-item {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    .service-detail-item:nth-child(even) .service-detail-image {
+        order: 1; /* Reset order for stacking */
+    }
+    .service-detail-image {
+        margin-bottom: 2rem;
+        order: 1;
+    }
+    .service-detail-content {
+        order: 2;
+    }
+    .service-detail-content ul {
+        text-align: left;
+        display: inline-block;
+    }
+    .pricing-card.popular {
+        transform: scale(1); /* Reset scale on mobile */
+    }
+}
+    </style>
+
+    <main id="main-content">
+        <section class="page-header hero">
+             <div class="container">
+                <div class="hero-text animate-group">
+                    <p class="subtitle" data-animation="fade-up">OUR EXPERTISE</p>
+                    <h1 data-animation="fade-up">Our Services</h1>
+                    <p class="hero-description" data-animation="fade-up">We offer a comprehensive suite of services designed to bring your digital vision to life, from initial concept to final deployment and beyond.</p>
+                </div>
+            </div>
+        </section>
+
+       <section id="services">
+            <div class="container">
+                <div class="section-header animate-group">
+                    <p class="subtitle" data-animation="fade-up">OUR CAPABILITIES</p>
+                    <h2 data-animation="fade-up">Core Services</h2>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card animate-group">
+                        <div class="icon" data-animation="fade-up"><i class="fas fa-layer-group"></i></div>
+                        <h3 data-animation="fade-up">Full-Stack Development</h3>
+                        <p data-animation="fade-up">End-to-end development of complex web applications, from robust back-end architecture to intuitive front-end interfaces.</p>
+                    </div>
+                    <div class="service-card animate-group">
+                        <div class="icon" data-animation="fade-up"><i class="fas fa-cloud"></i></div>
+                        <h3 data-animation="fade-up">Cloud & DevOps Solutions</h3>
+                        <p data-animation="fade-up">Optimize your infrastructure with our cloud architecture, CI/CD pipelines, and automated deployment strategies.</p>
+                    </div>
+                    <div class="service-card animate-group">
+                        <div class="icon" data-animation="fade-up"><i class="fas fa-drafting-compass"></i></div>
+                        <h3 data-animation="fade-up">UI/UX & Product Design</h3>
+                        <p data-animation="fade-up">Crafting user-centric designs that are not only beautiful but also provide a seamless and engaging user experience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="packages" style="background-color: var(--surface-color);">
+            <div class="container">
+                <div class="section-header animate-group">
+                    <p class="subtitle" data-animation="fade-up">FIND YOUR FIT</p>
+                    <h2 data-animation="fade-up">Our Packages</h2>
+                </div>
+                <div class="pricing-grid">
+                    <div class="pricing-card animate-group">
+                        <div class="pricing-header" data-animation="fade-up">
+                            <h3>Launchpad</h3>
+                            <p>For startups and new ideas</p>
+                        </div>
+                        <div class="pricing-price" data-animation="fade-up">
+                            <h4>Starting At</h4>
+                            <span>Contact for Quote</span>
+                        </div>
+                        <ul class="pricing-features" data-animation="fade-up">
+                            <li>Core Feature Development</li>
+                            <li>UI/UX Prototyping</li>
+                            <li>Basic Cloud Setup</li>
+                            <li>Technical Consultation</li>
+                        </ul>
+                        <div class="pricing-footer" data-animation="fade-up">
+                            <a href="#contact" class="btn">Get Started</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card popular animate-group">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="pricing-header" data-animation="fade-up">
+                            <h3>Accelerator</h3>
+                            <p>For growing businesses & Institutes Like GYM and School</p>
+                        </div>
+                        <div class="pricing-price" data-animation="fade-up">
+                            <h4>Starting At</h4>
+                            <span>Contact for Quote</span>
+                        </div>
+                        <ul class="pricing-features" data-animation="fade-up">
+                            <li>Full-Stack Application Build</li>
+                            <li>Advanced UI/UX Design</li>
+                            <li>Scalable Cloud Architecture</li>
+                            <li>CI/CD Pipeline Automation</li>
+                            <li>Priority Support</li>
+                        </ul>
+                        <div class="pricing-footer" data-animation="fade-up">
+                            <a href="#contact" class="btn">Get Started</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card animate-group">
+                        <div class="pricing-header" data-animation="fade-up">
+                            <h3>Enterprise</h3>
+                            <p>For Startups & established organizations</p>
+                        </div>
+                        <div class="pricing-price" data-animation="fade-up">
+                            <h4>Starting At</h4>
+                            <span>Contact for Quote</span>
+                        </div>
+                        <ul class="pricing-features" data-animation="fade-up">
+                            <li>Complex Platform Development</li>
+                            <li>Dedicated DevOps Team</li>
+                            <li>Enterprise-Grade Security</li>
+                            <li>Ongoing Maintenance & Support</li>
+                            <li>Full Design System</li>
+                        </ul>
+                        <div class="pricing-footer" data-animation="fade-up">
+                            <a href="#contact" class="btn">Get Started</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="cta-section">
+            <div class="container animate-group">
+                <h2 data-animation="fade-up">Let's Build the Future, Together.</h2>
+                <p data-animation="fade-up">Have a groundbreaking idea or a complex challenge? We have the expertise and the passion to bring it to life. Reach out to us to start the conversation.</p>
+                <a href="mailto:info@epplicon.net" class="btn" data-animation="fade-up">Schedule a Consultation</a>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Advanced UI Elements -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+    <a href="#main-content" id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- External JavaScript -->
+    <script src="assets/js/nav-footer.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/animations.js"></script>
+    <script src="assets/js/advanced.js"></script>
+    <script src="assets/js/interactive.js"></script>
+</body>
+</html>

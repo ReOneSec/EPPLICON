@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Epplicon Technologies</title>
+
+    <meta name="description" content="Learn about the mission, values, and the team behind Epplicon Technologies. Discover how we're driven to innovate and empower businesses.">
+    <meta name="keywords" content="About Epplicon, Sahabaj Alam, Tariq Ahmad Mir, Company Mission, Tech Company India">
+    <meta property="og:title" content="About Us | Epplicon Technologies">
+    
+    <link rel="icon" href="https://i.ibb.co/Vc8SbKH3/Picsart-25-06-12-13-49-11-841.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/advanced.css">
+    <link rel="stylesheet" href="assets/css/interactive.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="nav-placeholder"></div>
+
+<style>
+/* ==========================================================================
+   1. CONFIGURATION & THEME
+   ========================================================================== */
+
+:root {
+    /* Colors */
+    --primary-color: #0d6efd;
+    --secondary-color: #0a192f;
+    --background-color: #f5f7fa;
+    --surface-color: #ffffff;
+    --text-primary: #1e2a3a;
+    --text-secondary: #5a6473;
+    --border-color: #e9ecef;
+
+    /* Shadows */
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.1);
+
+    /* Transitions */
+    --transition-fast: all 0.2s ease-in-out;
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    /* Typography */
+    --font-family: 'Poppins', sans-serif;
+}
+
+
+/* ==========================================================================
+   2. GLOBAL STYLES & RESETS
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.8;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+}
+
+body.mobile-nav-active {
+    overflow: hidden;
+}
+
+.container {
+    width: 90%;
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+section {
+    padding: 100px 0;
+    overflow: hidden;
+}
+
+
+/* ==========================================================================
+   3. TYPography
+   ========================================================================== */
+
+h1, h2, h3, h4 {
+    font-weight: 700;
+    color: var(--secondary-color);
+    line-height: 1.3;
+}
+
+h1 { font-size: clamp(2.5rem, 5.5vw, 4.5rem); font-weight: 800; }
+h2 { font-size: clamp(2rem, 4vw, 3.2rem); }
+h3 { font-size: 1.6rem; }
+p { margin-bottom: 1rem; color: var(--text-secondary); }
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header .subtitle {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+
+/* ==========================================================================
+   4. COMPONENTS
+   ========================================================================== */
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 14px 35px;
+    background-image: linear-gradient(45deg, var(--primary-color) 0%, #0056b3 100%);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    transition: var(--transition-fast);
+    box-shadow: 0 4px 20px rgba(13, 110, 253, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+}
+
+/* --- STATEFUL CLICK ANIMATION Value Cards --- */
+.value-card {
+    background: var(--surface-color);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: left;
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-sm);
+    border: 2px solid transparent;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+.value-card::before {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle at center, rgba(13, 110, 253, 0.3), transparent 70%);
+    filter: blur(40px);
+    transform: translate(-45px, -45px);
+    z-index: 0;
+    opacity: 0; /* CORRECTED: Aurora is hidden by default */
+    transition: opacity 0.4s ease; 
+}
+.value-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-md);
+}
+.value-card.card-selected {
+    border-color: var(--primary-color);
+}
+.value-card.card-selected::before {
+    opacity: 0.8; /* CORRECTED: Aurora is visible ONLY when card is selected */
+}
+.value-card > * {
+    position: relative;
+    z-index: 1;
+}
+.value-icon {
+    width: 70px;
+    height: 70px;
+    background-color: var(--primary-color);
+    box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
+    border-radius: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-bottom: 1.5rem;
+}
+.value-icon i {
+    font-size: 2.5rem;
+    color: #fff;
+    transition: var(--transition-smooth);
+}
+.value-card.card-selected .value-icon {
+    transform: rotate(15deg);
+}
+/* --- END STYLES --- */
+
+
+/* Social Media Links */
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-right: 0.5rem;
+    transition: var(--transition-fast);
+}
+
+.social-links a:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+
+/* ==========================================================================
+   5. PRELOADER & ANIMATIONS
+   ========================================================================== */
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#preloader.loaded {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Scroll Animations */
+[data-animation="fade-up"] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+[data-animation="fade-up"].visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ==========================================================================
+   6. HEADER & NAVIGATION
+   ========================================================================== */
+
+.main-header {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: var(--transition-fast);
+}
+
+.main-header.header-scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-sm);
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 800;
+    text-decoration: none;
+    color: var(--secondary-color);
+}
+
+/* Desktop Navigation */
+.desktop-nav a {
+    text-decoration: none;
+    color: var(--text-primary);
+    margin-left: 35px;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.desktop-nav a:hover,
+.desktop-nav a.active {
+    color: var(--primary-color);
+}
+
+/* Mobile Navigation */
+.mobile-nav-toggle {
+    display: none; /* Hidden by default */
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 10px;
+}
+
+.mobile-nav-toggle .icon-bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--secondary-color);
+    margin: 5px 0;
+    transition: var(--transition-smooth);
+}
+
+.mobile-nav-toggle.active .icon-bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.mobile-nav-toggle.active .icon-bar:nth-child(2) { opacity: 0; }
+.mobile-nav-toggle.active .icon-bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(10, 25, 47, 0.95);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.mobile-nav.active {
+    left: 0;
+}
+
+.mobile-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin: 1.5rem 0;
+}
+
+
+/* ==========================================================================
+   7. PAGE SECTIONS
+   ========================================================================== */
+
+/* Hero Section */
+.page-header.hero {
+    text-align: center;
+    padding-top: 160px;
+    padding-bottom: 120px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* --- STYLE for "WHO WE ARE" --- */
+.page-header .subtitle {
+    color: var(--primary-color);
+    font-size: 19px; /* Base 17px + 2px */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+}
+
+.page-header .hero-text {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-description {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 1.5rem auto 2.5rem auto;
+}
+
+/* Our Story Section */
+#our-story {
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.story-image img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+}
+
+/* Founders Section */
+#founders {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.founder-bio-item {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+.founder-bio-item:last-child { margin-bottom: 0; }
+
+.founder-bio-item:nth-child(odd) { grid-template-columns: 1fr 300px; }
+.founder-bio-item:nth-child(odd) .founder-bio-image { grid-column: 2; }
+.founder-bio-item:nth-child(odd) .founder-bio-content { grid-column: 1; grid-row: 1; }
+.founder-bio-item:nth-child(even) { grid-template-columns: 300px 1fr; }
+
+.founder-bio-image img {
+    width: 100%;
+    max-width: 300px; /* Ensures image isn't oversized */
+    border-radius: 50%;
+    box-shadow: var(--shadow-md);
+    border: 8px solid var(--surface-color);
+}
+
+.founder-bio-content .role {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Values Section */
+#our-values {
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 60px;
+}
+
+/* CTA Section */
+.cta-section {
+    background-image: linear-gradient(45deg, var(--secondary-color), #1c2e4c);
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+    border-bottom: none;
+}
+
+.cta-section h2,
+.cta-section p {
+    color: #fff;
+}
+
+
+/* ==========================================================================
+   8. FOOTER
+   ========================================================================== */
+
+.site-footer {
+    background: var(--secondary-color);
+    color: #fff;
+    padding-top: 60px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 2rem;
+    padding-bottom: 40px;
+}
+
+.footer-grid h4 {
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.footer-grid p,
+.footer-grid a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.footer-grid a:hover { color: #fff; }
+.footer-grid ul { list-style: none; }
+.footer-grid li { margin-bottom: 0.5rem; }
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    padding: 25px 0;
+}
+
+
+/* ==========================================================================
+   9. RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* For Tablets and smaller devices */
+@media (max-width: 992px) {
+    /* Navigation */
+    .desktop-nav { display: none; }
+    .mobile-nav-toggle { display: block; }
+
+    /* Layouts */
+    .story-grid {
+        grid-template-columns: 1fr;
+    }
+    .story-image {
+        order: -1;
+        margin-bottom: 3rem;
+    }
+
+    /* Founder Stacking Logic For MOBILE */
+    .founder-bio-item,
+    .founder-bio-item:nth-child(odd),
+    .founder-bio-item:nth-child(even) {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .founder-bio-image,
+    .founder-bio-item:nth-child(odd) .founder-bio-image {
+        order: 1;
+        grid-column: 1; /* Reset column */
+        margin: 0 auto 2rem auto;
+        max-width: 250px;
+    }
+
+    .founder-bio-content,
+    .founder-bio-item:nth-child(odd) .founder-bio-content {
+        order: 2;
+        grid-column: 1; /* Reset column */
+        grid-row: auto; /* Reset row */
+    }
+}
+
+/* For Mobile Phones */
+@media (max-width: 768px) {
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+    </style>
+
+    <main id="main-content">
+        <section class="page-header hero">
+             <div class="container">
+                <div class="hero-text animate-group">
+                    <p class="subtitle" data-animation="fade-up">WHO WE ARE</p>
+                    <h1 data-animation="fade-up">About Epplicon Technologies</h1>
+                    <p class="hero-description" data-animation="fade-up">We are a team of passionate creators, innovators, and problem-solvers dedicated to pushing the boundaries of what's possible in the digital world.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="our-story" style="background-color: var(--surface-color);">
+            <div class="container">
+                <div class="story-grid">
+                    <div class="story-content animate-group">
+                        <h2 data-animation="fade-up">Our Mission to Innovate & Empower</h2>
+                        <p data-animation="fade-up">Epplicon Technologies was founded on the principle that technology should be a powerful tool for progress. We saw a need for digital partners who not only build software, but who build solutions that drive real-world growth and create lasting value.</p>
+                        <p data-animation="fade-up">Our commitment is to transform ambitious ideas into robust, scalable, and impactful digital realities. We believe in building strong partnerships with our clients, becoming a seamless extension of their team to achieve shared goals.</p>
+                    </div>
+                    <div class="story-image animate-group">
+                        <img src="https://placehold.co/600x450/0a192f/FFFFFF?text=Our+Vision" alt="Epplicon team vision" data-animation="fade-up">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<section id="founders">
+    <div class="container">
+        <div class="section-header animate-group">
+            <p class="subtitle" data-animation="fade-up">THE LEADERSHIP</p>
+            <h2 data-animation="fade-up">Meet Our Founders</h2>
+        </div>
+
+                <div class="founder-bio-item animate-group">
+            <div class="founder-bio-image" data-animation="fade-up">
+                <img src="https://i.ibb.co/cqX8kcg/Picsart-25-06-10-23-41-06-490.jpg" alt="Sahabaj Alam, Co-Founder & C.E.O">
+            </div>
+            <div class="founder-bio-content">
+                <h3 data-animation="fade-up">Sahabaj Alam</h3>
+                <p class="role" data-animation="fade-up">Co-Founder & C.E.O</p>
+                <p data-animation="fade-up">As the visionary behind Epplicon, Sahabaj drives the company's strategic direction. With a passion for entrepreneurship and a deep understanding of market dynamics, he ensures that every project aligns with our clients' business objectives for maximum impact and growth.</p>
+                <div class="social-links" data-animation="fade-up">
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="founder-bio-item animate-group">
+            <div class="founder-bio-image" data-animation="fade-up">
+                <img src="https://i.ibb.co/JgDCD9G/Picsart-25-10-03-00-00-10-457.jpg" alt="Tariq Ahmad Mir, Co-founder & C.T.O">
+            </div>
+            <div class="founder-bio-content">
+                <h3 data-animation="fade-up">Tariq Ahmad Mir</h3>
+                <p class="role" data-animation="fade-up">Co-founder & C.T.O</p>
+                <p data-animation="fade-up">Tariq is the technical architect of Epplicon's success. With extensive experience in full-stack development and cloud infrastructure, he leads our engineering team in building secure, scalable, and high-performance applications that stand the test of time.</p>
+                 <div class="social-links" data-animation="fade-up">
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Github"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+
+        <section id="our-values" style="background-color: var(--surface-color);">
+            <div class="container">
+                <div class="section-header animate-group">
+                    <p class="subtitle" data-animation="fade-up">OUR GUIDING PRINCIPLES</p>
+                    <h2 data-animation="fade-up">Our Core Values</h2>
+                </div>
+                <div class="values-grid">
+                    <div class="value-card animate-group">
+                        <div class="value-icon" data-animation="fade-up"><i class="fas fa-lightbulb"></i></div>
+                        <h3 data-animation="fade-up">Innovation</h3>
+                        <p data-animation="fade-up">We constantly explore new technologies and approaches to deliver cutting-edge solutions.</p>
+                    </div>
+                    <div class="value-card animate-group">
+                        <div class="value-icon" data-animation="fade-up"><i class="fas fa-handshake"></i></div>
+                        <h3 data-animation="fade-up">Integrity</h3>
+                        <p data-animation="fade-up">We build trust through transparent communication and a commitment to doing the right thing.</p>
+                    </div>
+                    <div class="value-card animate-group">
+                        <div class="value-icon" data-animation="fade-up"><i class="fas fa-users"></i></div>
+                        <h3 data-animation="fade-up">Collaboration</h3>
+                        <p data-animation="fade-up">We work as a true partner to our clients, combining our expertise with their vision.</p>
+                    </div>
+                     <div class="value-card animate-group">
+                        <div class="value-icon" data-animation="fade-up"><i class="fas fa-star"></i></div>
+                        <h3 data-animation="fade-up">Excellence</h3>
+                        <p data-animation="fade-up">We are committed to the highest standards of quality in every line of code and pixel we design.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="our-journey" style="background-color: var(--surface-color);">
+            <div class="container">
+                <div class="section-header animate-group">
+                    <p class="subtitle" data-animation="fade-up">OUR JOURNEY</p>
+                    <h2 data-animation="fade-up">Company Timeline</h2>
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-item animate-group">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content" data-animation="fade-up">
+                            <div class="timeline-date">2024 - Founded</div>
+                            <h3 class="timeline-title">Epplicon Technologies Established</h3>
+                            <p class="timeline-description">Founded by Sahabaj Alam and Tariq Ahmad Mir with a vision to transform businesses through innovative digital solutions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item animate-group">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content" data-animation="fade-up">
+                            <div class="timeline-date">2024 Q2 - First Projects</div>
+                            <h3 class="timeline-title">First Successful Deployments</h3>
+                            <p class="timeline-description">Completed our first major projects, establishing our reputation for quality and reliability in the market.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item animate-group">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content" data-animation="fade-up">
+                            <div class="timeline-date">2024 Q3 - Team Expansion</div>
+                            <h3 class="timeline-title">Growing Our Team</h3>
+                            <p class="timeline-description">Expanded our team with talented developers, designers, and DevOps engineers to serve more clients.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item animate-group">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content" data-animation="fade-up">
+                            <div class="timeline-date">2025 - Present</div>
+                            <h3 class="timeline-title">Continuing Innovation</h3>
+                            <p class="timeline-description">Serving clients globally, continuously innovating, and pushing the boundaries of what's possible in digital technology.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="cta-section">
+            <div class="container animate-group">
+                <h2 data-animation="fade-up">Let's Build the Future, Together.</h2>
+                <p data-animation="fade-up">Have a groundbreaking idea or a complex challenge? We have the expertise and the passion to bring it to life. Reach out to us to start the conversation.</p>
+                <a href="mailto:info@epplicon.net" class="btn" data-animation="fade-up">Schedule a Consultation</a>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Preloader, header, and mobile nav are handled by main.js and nav-footer.js
+        const observerCallback = (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const animationElements = entry.target.querySelectorAll('[data-animation="fade-up"]');
+                    animationElements.forEach((el, index) => {
+                        el.style.transitionDelay = `${index * 120}ms`;
+                        el.classList.add('visible');
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+        const observerOptions = {
+            threshold: 0.15
+        };
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        const animationGroups = document.querySelectorAll('.animate-group');
+        animationGroups.forEach((group) => observer.observe(group));
+
+        // --- SCRIPT FOR STATEFUL CARD CLICK ---
+        const valueCards = document.querySelectorAll('.value-card');
+        if (valueCards.length > 0) {
+            // Add click listener to each card
+            valueCards.forEach(card => {
+                card.addEventListener('click', (event) => {
+                    // This stops the click from immediately bubbling up to the document
+                    event.stopPropagation(); 
+                    
+                    // Check if the clicked card is already selected
+                    const isAlreadySelected = card.classList.contains('card-selected');
+
+                    // First, remove the selected class from all cards
+                    valueCards.forEach(c => c.classList.remove('card-selected'));
+
+                    // If the card was not already selected, select it.
+                    // This allows clicking the same card again to deselect it.
+                    if (!isAlreadySelected) {
+                        card.classList.add('card-selected');
+                    }
+                });
+            });
+
+            // Add click listener to the whole document to deselect
+            document.addEventListener('click', (event) => {
+                // If the click is not on a card or inside a card, deselect all.
+                if (!event.target.closest('.value-card')) {
+                    valueCards.forEach(c => c.classList.remove('card-selected'));
+                }
+            });
+        }
+    });
+    </script>
+    
+    <!-- External JavaScript - nav-footer.js must load first -->
+    <script src="assets/js/nav-footer.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/animations.js"></script>
+    <script src="assets/js/advanced.js"></script>
+    <script src="assets/js/interactive.js"></script>
+</body>
+</html>

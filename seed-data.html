@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Firebase Data - Epplicon Technologies</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #0d6efd; margin-top: 0; }
+        button {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .log {
+            background: #1e2a3a;
+            color: #4dabf7;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log div {
+            margin: 5px 0;
+        }
+        .success { color: #51cf66; }
+        .error { color: #ff6b6b; }
+        .warning { color: #ffd43b; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🌱 Firebase Data Seeder</h1>
+        <p>This utility helps initialize your Firebase Firestore collections with sample data.</p>
+        
+        <h3>Step 1: Ensure you're logged in as admin</h3>
+        <button id="check-auth-btn">Check Authentication</button>
+        <div id="auth-status"></div>
+        
+        <h3>Step 2: Seed Collections</h3>
+        <button id="seed-sample-project-btn">Seed Sample Project</button>
+        <button id="seed-sample-milestone-btn">Seed Sample Milestone</button>
+        <button id="seed-sample-invoice-btn">Seed Sample Invoice</button>
+        <button id="seed-sample-message-btn">Seed Sample Message</button>
+        <button id="seed-all-btn">Seed All Sample Data</button>
+        
+        <h3>Log:</h3>
+        <div id="log" class="log"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc,
+            serverTimestamp,
+            getDocs
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        import { firebaseConfig_DB_AUTH } from './config.js';
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig_DB_AUTH);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let currentUser = null;
+        const logDiv = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(div);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        // Check auth
+        document.getElementById('check-auth-btn').addEventListener('click', () => {
+            if (currentUser) {
+                document.getElementById('auth-status').innerHTML = `
+                    <p style="color: green;">✅ Authenticated as: ${currentUser.email}</p>
+                    <p>User ID: ${currentUser.uid}</p>
+                `;
+                log('Authenticated as: ' + currentUser.email, 'success');
+            } else {
+                document.getElementById('auth-status').innerHTML = `
+                    <p style="color: red;">❌ Not authenticated. Please login to admin.html first.</p>
+                `;
+                log('Not authenticated', 'error');
+            }
+        });
+        
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                log('User authenticated: ' + user.email, 'success');
+            } else {
+                currentUser = null;
+                log('No user authenticated. Login to admin.html first.', 'warning');
+            }
+        });
+        
+        // Seed sample project
+        document.getElementById('seed-sample-project-btn').addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
+            
+            try {
+                // Get first client or use admin ID
+                const clientsSnapshot = await getDocs(collection(db, 'clients'));
+                let clientId = currentUser.uid; // Default to admin
+                
+                if (!clientsSnapshot.empty) {
+                    clientId = clientsSnapshot.docs[0].data().uid;
+                    log(`Using client: ${clientsSnapshot.docs[0].data().name}`, 'info');
+                } else {
+                    log('No clients found, using admin ID as clientId', 'warning');
+                }
+                
+                await addDoc(collection(db, 'projects'), {
+                    clientId: clientId,
+                    name: 'Sample Website Development',
+                    description: 'Building a modern, responsive website with React and Firebase',
+                    status: 'in-progress',
+                    progress: 65,
+                    createdAt: serverTimestamp()
+                });
+                
+                log('✅ Sample project created!', 'success');
+            } catch (error) {
+                log('❌ Error: ' + error.message, 'error');
+                console.error(error);
+            }
+        });
+        
+        // Seed sample milestone
+        document.getElementById('seed-sample-milestone-btn').addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
+            
+            try {
+                const clientsSnapshot = await getDocs(collection(db, 'clients'));
+                let clientId = currentUser.uid;
+                
+                if (!clientsSnapshot.empty) {
+                    clientId = clientsSnapshot.docs[0].data().uid;
+                }
+                
+                await addDoc(collection(db, 'milestones'), {
+                    clientId: clientId,
+                    title: 'Project Kickoff',
+                    description: 'Initial project planning and requirements gathering completed',
+                    date: new Date(),
+                    createdAt: serverTimestamp()
+                });
+                
+                log('✅ Sample milestone created!', 'success');
+            } catch (error) {
+                log('❌ Error: ' + error.message, 'error');
+                console.error(error);
+            }
+        });
+        
+        // Seed sample invoice
+        document.getElementById('seed-sample-invoice-btn').addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
+            
+            try {
+                const clientsSnapshot = await getDocs(collection(db, 'clients'));
+                let clientId = currentUser.uid;
+                
+                if (!clientsSnapshot.empty) {
+                    clientId = clientsSnapshot.docs[0].data().uid;
+                }
+                
+                await addDoc(collection(db, 'invoices'), {
+                    clientId: clientId,
+                    invoiceNumber: 'INV-' + Date.now(),
+                    projectName: 'Website Development',
+                    amount: 5000,
+                    status: 'pending',
+                    date: new Date(),
+                    createdAt: serverTimestamp()
+                });
+                
+                log('✅ Sample invoice created!', 'success');
+            } catch (error) {
+                log('❌ Error: ' + error.message, 'error');
+                console.error(error);
+            }
+        });
+        
+        // Seed sample message
+        document.getElementById('seed-sample-message-btn').addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
+            
+            try {
+                const clientsSnapshot = await getDocs(collection(db, 'clients'));
+                let clientId = currentUser.uid;
+                
+                if (!clientsSnapshot.empty) {
+                    clientId = clientsSnapshot.docs[0].data().uid;
+                }
+                
+                await addDoc(collection(db, 'messages'), {
+                    clientId: clientId,
+                    senderId: 'admin',
+                    text: 'Welcome to Epplicon Technologies! We\'re excited to work with you.',
+                    read: false,
+                    timestamp: serverTimestamp()
+                });
+                
+                log('✅ Sample message created!', 'success');
+            } catch (error) {
+                log('❌ Error: ' + error.message, 'error');
+                console.error(error);
+            }
+        });
+        
+        // Seed all
+        document.getElementById('seed-all-btn').addEventListener('click', async () => {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
+            
+            log('Starting to seed all sample data...', 'info');
+            
+            // Click all buttons
+            document.getElementById('seed-sample-project-btn').click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            document.getElementById('seed-sample-milestone-btn').click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            document.getElementById('seed-sample-invoice-btn').click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            document.getElementById('seed-sample-message-btn').click();
+            
+            log('✅ All sample data seeded!', 'success');
+        });
+    </script>
+</body>
+</html>
+

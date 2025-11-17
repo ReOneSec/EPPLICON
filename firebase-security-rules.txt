@@ -1,0 +1,107 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // --- Posts Collection ---
+    // ANYONE can read PUBLISHED posts.
+    // ONLY a logged-in user can read DRAFTS (for the admin panel).
+    // ONLY a logged-in user can write.
+    match /posts/{postId} {
+      allow read: if resource.data.isPublished == true || request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // --- Categories Collection ---
+    // ANYONE can read categories.
+    // ONLY a logged-in user can write.
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // --- Authors Collection ---
+    // ANYONE can read author profiles.
+    // ONLY the correct logged-in user can write to their OWN profile.
+    match /authors/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // --- CLIENT PORTAL COLLECTIONS ---
+
+    // --- Clients Collection ---
+    // Users can create their own client profile during registration
+    // Users can only read/update their own profile
+    // Admins can read all client profiles
+    match /clients/{clientId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && 
+                     (request.auth.uid == resource.data.uid || 
+                      get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null);
+      allow update: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow delete: if request.auth != null && 
+                       get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null;
+    }
+
+    // --- Projects Collection ---
+    // Admins can create/update/delete projects
+    // Clients can read their own projects
+    match /projects/{projectId} {
+      allow create, update, delete: if request.auth != null && 
+                                       get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null;
+      allow read: if request.auth != null && 
+                     (resource.data.clientId == request.auth.uid || 
+                      get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null);
+    }
+
+    // --- Messages Collection ---
+    // Clients can create messages and read their own messages
+    // Admins can read all messages and send messages
+    match /messages/{messageId} {
+      allow create: if request.auth != null;
+      allow read, update: if request.auth != null && 
+                             (resource.data.clientId == request.auth.uid || 
+                              get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null);
+      allow delete: if request.auth != null && 
+                       get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null;
+    }
+
+    // --- Milestones Collection ---
+    // Admins can create/update/delete milestones
+    // Clients can read their own milestones
+    match /milestones/{milestoneId} {
+      allow create, update, delete: if request.auth != null && 
+                                       get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null;
+      allow read: if request.auth != null && 
+                     (resource.data.clientId == request.auth.uid || 
+                      get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null);
+    }
+
+    // --- Invoices Collection ---
+    // Admins can create/update/delete invoices
+    // Clients can read their own invoices
+    match /invoices/{invoiceId} {
+      allow create, update, delete: if request.auth != null && 
+                                       get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null;
+      allow read: if request.auth != null && 
+                     (resource.data.clientId == request.auth.uid || 
+                      get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null);
+    }
+
+    // --- Feature Requests Collection ---
+    // Clients can create their own feature requests and read them
+    // Admins can read all feature requests and update their status
+    match /featureRequests/{requestId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null && 
+                     (resource.data.clientId == request.auth.uid || 
+                      get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null);
+      allow update: if request.auth != null && 
+                       get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null;
+      allow delete: if request.auth != null && 
+                       get(/databases/$(database)/documents/authors/$(request.auth.uid)).data != null;
+    }
+  }
+}
+

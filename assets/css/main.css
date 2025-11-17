@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Epplicon Technologies - Main Stylesheet
+   Theme Configuration & Global Styles
+   ========================================================================== */
+
+/* --- THEME & CONFIGURATION --- */
+:root {
+    /* Light Mode Colors */
+    --primary-color: #0d6efd;
+    --secondary-color: #0a192f;
+    --background-color: #f5f7fa;
+    --surface-color: #ffffff;
+    --text-primary: #1e2a3a;
+    --text-secondary: #5a6473;
+    --border-color: #e9ecef;
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.1);
+    --transition-fast: all 0.2s ease-in-out;
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --font-family: 'Poppins', sans-serif;
+}
+
+/* Dark Mode Colors */
+[data-theme="dark"] {
+    --primary-color: #4dabf7;
+    --secondary-color: #1a1a2e;
+    --background-color: #0f0f1e;
+    --surface-color: #16213e;
+    --text-primary: #e4e4e7;
+    --text-secondary: #a1a1aa;
+    --border-color: #27272a;
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* --- GLOBAL STYLES & RESETS --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.8;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+body.mobile-nav-active {
+    overflow: hidden;
+}
+
+/* --- LAYOUT --- */
+.container {
+    width: 90%;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+section {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+section:last-of-type {
+    border-bottom: none;
+}
+
+/* --- TYPOGRAPHY --- */
+h1, h2, h3, h4 {
+    font-weight: 700;
+    color: var(--secondary-color);
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 800;
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+h3 {
+    font-size: 1.6rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header .subtitle {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+/* --- SKIP TO CONTENT (Accessibility) --- */
+.skip-to-content {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 1rem;
+    text-decoration: none;
+    z-index: 10000;
+    font-weight: 600;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* --- PRELOADER --- */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    visibility: visible;
+    opacity: 1;
+}
+
+#preloader.loaded {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+}
+
