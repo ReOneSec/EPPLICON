@@ -151,6 +151,8 @@ See `FIREBASE_SECURITY_RULES.md` for detailed Firestore security rules. Key poin
 ## 📖 Documentation
 
 - **[PROJECT_REPORT.md](PROJECT_REPORT.md)** ⭐ - **Comprehensive project report with all features highlighted**
+- **[DEVELOPMENT_ROADMAP.md](DEVELOPMENT_ROADMAP.md)** 🚀 - **Complete development plan to make the project more robust & feature-rich**
+- **[QUICK_START_IMPLEMENTATION.md](QUICK_START_IMPLEMENTATION.md)** ⚡ - **Quick start guide for implementing priority features**
 - **[SETUP.md](SETUP.md)** - Complete setup guide with step-by-step instructions
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to the project
 - **[FIREBASE_SECURITY_RULES.md](FIREBASE_SECURITY_RULES.md)** - Firebase security rules documentation
