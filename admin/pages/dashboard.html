@@ -1,0 +1,117 @@
+admin need to edit or delete created projects <!-- Dashboard Page -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Welcome back! Here's an overview of your content.</p>
+    </div>
+    <button class="btn" id="refresh-dashboard">
+        <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-icon">
+            <i class="fas fa-newspaper"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="stat-posts">0</div>
+            <div class="stat-label">Total Posts</div>
+            <div class="stat-hint">All posts in your blog</div>
+        </div>
+    </div>
+    
+    <div class="stat-card green">
+        <div class="stat-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="stat-published">0</div>
+            <div class="stat-label">Published</div>
+            <div class="stat-hint">Live on your blog</div>
+        </div>
+    </div>
+    
+    <div class="stat-card orange">
+        <div class="stat-icon">
+            <i class="fas fa-edit"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="stat-drafts">0</div>
+            <div class="stat-label">Drafts</div>
+            <div class="stat-hint">In progress</div>
+        </div>
+    </div>
+    
+    <div class="stat-card purple">
+        <div class="stat-icon">
+            <i class="fas fa-tags"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="stat-categories">0</div>
+            <div class="stat-label">Categories</div>
+            <div class="stat-hint">Content topics</div>
+        </div>
+    </div>
+    
+    <div class="stat-card teal">
+        <div class="stat-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-number" id="stat-clients">0</div>
+            <div class="stat-label">Total Clients</div>
+            <div class="stat-hint">Active clients</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">
+        <i class="fas fa-bolt"></i> Quick Actions
+    </h2>
+    <div class="actions-grid">
+        <button class="action-btn" id="quick-new-post">
+            <div class="action-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="action-text">
+                <strong>Create New Post</strong>
+                <small>Start writing a new article</small>
+            </div>
+        </button>
+        
+        <button class="action-btn" id="quick-categories">
+            <div class="action-icon">
+                <i class="fas fa-tags"></i>
+            </div>
+            <div class="action-text">
+                <strong>Manage Categories</strong>
+                <small>Organize your content</small>
+            </div>
+        </button>
+        
+        <button class="action-btn" id="quick-clients">
+            <div class="action-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="action-text">
+                <strong>Manage Clients</strong>
+                <small>View and manage clients</small>
+            </div>
+        </button>
+        
+        <button class="action-btn" id="quick-blog">
+            <div class="action-icon">
+                <i class="fas fa-external-link-alt"></i>
+            </div>
+            <div class="action-text">
+                <strong>View Blog</strong>
+                <small>See your live website</small>
+            </div>
+        </button>
+    </div>
+</div>
+
+<script type="module" src="assets/js/dashboard.js"></script>
+

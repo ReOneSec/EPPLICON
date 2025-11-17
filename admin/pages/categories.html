@@ -1,0 +1,41 @@
+<!-- Categories Management Page -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Manage Categories</h1>
+        <p class="page-subtitle">Organize your content with categories</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">
+        <i class="fas fa-plus-circle"></i> Add New Category
+    </h2>
+    <form id="category-form" style="display: grid; grid-template-columns: 1fr auto auto; gap: var(--space-3); align-items: end;">
+        <div class="form-group" style="margin: 0;">
+            <label>Category Name</label>
+            <input type="text" id="category-name" class="form-control" placeholder="e.g., Technology, Design..." required>
+        </div>
+        <input type="hidden" id="category-id">
+        <button type="submit" class="btn">
+            <i class="fas fa-save"></i> Save
+        </button>
+        <button type="button" class="btn btn-secondary hidden" id="cancel-category">
+            <i class="fas fa-times"></i> Cancel
+        </button>
+    </form>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+        <h2 class="section-title" style="margin: 0;">
+            <i class="fas fa-list"></i> All Categories
+        </h2>
+        <span id="category-count" style="color: var(--gray-500); font-weight: 600;">0 categories</span>
+    </div>
+    <div id="categories-list">
+        <div class="spinner"></div>
+    </div>
+</div>
+
+<script type="module" src="assets/js/categories.js"></script>
+

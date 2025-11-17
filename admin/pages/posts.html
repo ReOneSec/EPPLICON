@@ -1,0 +1,150 @@
+<!-- Posts Management Page -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">All Posts</h1>
+        <p class="page-subtitle">Manage and organize your blog posts</p>
+    </div>
+    <button class="btn" id="new-post-btn">
+        <i class="fas fa-plus"></i> Create New Post
+    </button>
+</div>
+
+<div class="card">
+    <h2 class="section-title">
+        <i class="fas fa-filter"></i> Filters & Search
+    </h2>
+    <div class="filters-card">
+        <div class="filter-group">
+            <label><i class="fas fa-search"></i> Search Posts</label>
+            <input type="text" id="post-search" class="form-control" placeholder="Search by title...">
+        </div>
+        <div class="filter-group">
+            <label><i class="fas fa-flag"></i> Status</label>
+            <select id="status-filter" class="form-control">
+                <option value="">All Status</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label><i class="fas fa-tag"></i> Category</label>
+            <select id="category-filter" class="form-control">
+                <option value="">All Categories</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <button class="btn btn-secondary btn-block" id="clear-filters" style="margin-top: 24px;">
+                <i class="fas fa-times"></i> Clear
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="posts-list">
+    <div class="spinner"></div>
+</div>
+
+<!-- Post Editor Modal -->
+<div id="post-editor-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h2 id="editor-modal-title">Create New Post</h2>
+            <button class="icon-btn" onclick="window.closePostEditor()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="post-form">
+                <input type="hidden" id="post-id">
+                
+                <div class="form-group">
+                    <label>Post Title *</label>
+                    <input type="text" id="post-title" class="form-control" required placeholder="Enter a compelling title">
+                </div>
+                
+                <div class="form-group">
+                    <label>Post Slug (URL)</label>
+                    <input type="text" id="post-slug" class="form-control" readonly placeholder="Auto-generated from title">
+                    <small style="color: var(--gray-500); font-size: 0.8125rem;">This is generated automatically and cannot be changed.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Categories * <small>(Hold Ctrl/Cmd for multiple)</small></label>
+                    <select id="post-categories" class="form-control" multiple required style="height: 100px;">
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Short Excerpt</label>
+                    <textarea id="post-excerpt" class="form-control" rows="2" maxlength="200" placeholder="Brief summary for blog list page"></textarea>
+                    <div style="text-align: right; margin-top: var(--space-1);">
+                        <small id="excerpt-count" style="color: var(--gray-500);">0/200 characters</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="post-status" class="form-control">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Feature Image</label>
+                    <input type="file" id="post-image" class="form-control" accept="image/*">
+                    <div id="post-image-preview" class="hidden" style="margin-top: var(--space-2);">
+                        <img src="" style="max-width: 200px; border-radius: var(--radius);">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+                        <label style="margin: 0;">Main Content *</label>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="window.openHtmlPasteModal && window.openHtmlPasteModal()">
+                            <i class="fas fa-code"></i> Paste HTML
+                        </button>
+                    </div>
+                    <div id="editor-container"></div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="window.closePostEditor()">Cancel</button>
+            <button class="btn" onclick="document.getElementById('post-form').requestSubmit()">
+                <i class="fas fa-save"></i> Save Post
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- HTML PASTE MODAL -->
+<div id="html-paste-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2>Paste HTML Code</h2>
+            <button class="icon-btn" onclick="window.closeHtmlPasteModal && window.closeHtmlPasteModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Paste your HTML code below:</label>
+                <textarea id="html-paste-input" class="form-control" rows="10" placeholder="<h2>My Title</h2><p>My content...</p>" style="font-family: 'Courier New', monospace;"></textarea>
+                <small style="color: var(--gray-500); display: block; margin-top: var(--space-2);">
+                    <i class="fas fa-info-circle"></i> This will insert HTML at the current cursor position in the editor.
+                </small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="window.closeHtmlPasteModal && window.closeHtmlPasteModal()">Cancel</button>
+            <button class="btn" onclick="window.insertHtmlToEditor && window.insertHtmlToEditor()">
+                <i class="fas fa-code"></i> Insert HTML
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script type="module" src="assets/js/posts.js"></script>
+

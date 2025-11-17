@@ -1,0 +1,342 @@
+<!-- Client Portal Management Page -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Client Portal Management</h1>
+        <p class="page-subtitle">Manage client accounts, projects, and communications</p>
+    </div>
+    <button class="btn" id="refresh-clients-btn">
+        <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+</div>
+
+<!-- Client List Card -->
+<div class="card" id="clients-list-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+        <h2 class="section-title" style="margin: 0;">
+            <i class="fas fa-users"></i> All Clients
+        </h2>
+        <span id="clients-count" style="color: var(--gray-500); font-weight: 600;">0 clients</span>
+    </div>
+    <div id="clients-list">
+        <div class="spinner"></div>
+    </div>
+</div>
+
+<!-- Client Management View (populated by admin-client-portal.js) -->
+<div id="client-management-view" class="hidden" style="width: 100%; max-width: 100%;">
+    <div class="card" style="background: var(--white); border: 2px solid var(--primary); box-shadow: var(--shadow-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 2px solid var(--primary); flex-wrap: wrap; gap: var(--space-4);">
+            <div style="flex: 1;">
+                <h2 id="selected-client-name" style="margin: 0 0 var(--space-3) 0; color: var(--primary); font-size: 1.5rem;">
+                    <i class="fas fa-user-circle"></i> Client Name
+                </h2>
+                
+                <!-- Client Info Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-3); background: var(--gray-50); padding: var(--space-4); border-radius: var(--radius-lg);">
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: var(--space-1); text-transform: uppercase; font-weight: 600;">Email</div>
+                        <div id="selected-client-email" style="color: var(--text-primary); font-weight: 500;">
+                            <i class="fas fa-envelope" style="color: var(--primary); margin-right: var(--space-1);"></i>
+                            client@email.com
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: var(--space-1); text-transform: uppercase; font-weight: 600;">WhatsApp</div>
+                        <div id="selected-client-whatsapp" style="color: var(--text-primary); font-weight: 500;">
+                            <i class="fab fa-whatsapp" style="color: #25D366; margin-right: var(--space-1);"></i>
+                            <span>Not provided</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: var(--space-1); text-transform: uppercase; font-weight: 600;">Country Code</div>
+                        <div id="selected-client-country" style="color: var(--text-primary); font-weight: 500;">
+                            <i class="fas fa-globe" style="color: var(--info); margin-right: var(--space-1);"></i>
+                            <span>Not provided</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: var(--space-1); text-transform: uppercase; font-weight: 600;">Joined</div>
+                        <div id="selected-client-joined" style="color: var(--text-primary); font-weight: 500;">
+                            <i class="fas fa-calendar" style="color: var(--success); margin-right: var(--space-1);"></i>
+                            <span>-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="close-client-view" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+
+        <!-- Client Management Tabs -->
+        <div class="client-tabs" style="border-bottom: 2px solid var(--gray-200); margin-bottom: var(--space-4);">
+            <button class="tab-btn client-tab-btn active" data-tab="client-projects">
+                <i class="fas fa-project-diagram"></i> Projects
+            </button>
+            <button class="tab-btn client-tab-btn" data-tab="client-messages">
+                <i class="fas fa-comments"></i> Messages
+            </button>
+            <button class="tab-btn client-tab-btn" data-tab="client-files">
+                <i class="fas fa-folder"></i> Files
+            </button>
+            <button class="tab-btn client-tab-btn" data-tab="client-milestones">
+                <i class="fas fa-timeline"></i> Milestones
+            </button>
+            <button class="tab-btn client-tab-btn" data-tab="client-invoices">
+                <i class="fas fa-file-invoice"></i> Invoices
+            </button>
+            <button class="tab-btn client-tab-btn" data-tab="client-features">
+                <i class="fas fa-lightbulb"></i> Feature Requests
+            </button>
+            <button class="tab-btn client-tab-btn" data-tab="client-profile">
+                <i class="fas fa-user-cog"></i> Profile & History
+            </button>
+        </div>
+
+        <!-- Projects Tab -->
+        <div id="client-tab-projects" class="tab-content client-tab-content active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+                <h3 style="margin: 0;">
+                    <i class="fas fa-project-diagram"></i> Projects
+                </h3>
+                <button id="create-project-btn" class="btn">
+                    <i class="fas fa-plus"></i> Create Project
+                </button>
+            </div>
+            <div id="client-projects-list"></div>
+        </div>
+
+        <!-- Messages Tab -->
+        <div id="client-tab-messages" class="tab-content client-tab-content">
+            <h3 style="margin-bottom: var(--space-3);">
+                <i class="fas fa-comments"></i> Chat with Client
+            </h3>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <strong>Messages</strong>
+                </div>
+                <div class="chat-messages" id="admin-chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="admin-chat-input" class="form-control" placeholder="Type a message..." style="flex: 1;">
+                    <button class="btn" id="admin-send-message-btn">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Files Tab -->
+        <div id="client-tab-files" class="tab-content client-tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+                <h3 style="margin: 0;">
+                    <i class="fas fa-folder"></i> Files
+                </h3>
+                <button class="btn" id="admin-upload-file-btn">
+                    <i class="fas fa-upload"></i> Upload File
+                </button>
+                <input type="file" id="admin-upload-file" style="display: none;">
+            </div>
+            <div id="client-files-list"></div>
+        </div>
+
+        <!-- Milestones Tab -->
+        <div id="client-tab-milestones" class="tab-content client-tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+                <h3 style="margin: 0;">
+                    <i class="fas fa-timeline"></i> Milestones
+                </h3>
+                <button id="create-milestone-btn" class="btn">
+                    <i class="fas fa-plus"></i> Add Milestone
+                </button>
+            </div>
+            <div id="client-milestones-list"></div>
+        </div>
+
+        <!-- Invoices Tab -->
+        <div id="client-tab-invoices" class="tab-content client-tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+                <h3 style="margin: 0;">
+                    <i class="fas fa-file-invoice"></i> Invoices
+                </h3>
+                <button id="create-invoice-btn" class="btn">
+                    <i class="fas fa-plus"></i> Create Invoice
+                </button>
+            </div>
+            
+            <!-- Invoice Filters -->
+            <div style="display: flex; gap: var(--space-3); margin-bottom: var(--space-4); flex-wrap: wrap;">
+                <select id="invoice-status-filter" class="form-control" style="width: auto; min-width: 150px;">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+                <input type="text" id="invoice-search" class="form-control" placeholder="Search invoices..." style="flex: 1; min-width: 200px;">
+            </div>
+            
+            <div id="client-invoices-list"></div>
+        </div>
+
+        <!-- Feature Requests Tab -->
+        <div id="client-tab-features" class="tab-content client-tab-content">
+            <h3 style="margin-bottom: var(--space-3);">
+                <i class="fas fa-lightbulb"></i> Feature Requests
+            </h3>
+            <div id="client-feature-requests-list"></div>
+        </div>
+        
+        <!-- Profile & Edit History Tab -->
+        <div id="client-tab-profile" class="tab-content client-tab-content">
+            <h3 style="margin-bottom: var(--space-3);">
+                <i class="fas fa-user-cog"></i> Client Profile & Edit History
+            </h3>
+            <div id="client-profile-info"></div>
+            
+            <h3 style="margin: var(--space-6) 0 var(--space-3) 0;">
+                <i class="fas fa-history"></i> Edit History
+            </h3>
+            <div id="client-edit-history"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Creation Modal -->
+<div id="project-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2 id="project-modal-title">Create Project</h2>
+            <button class="icon-btn" onclick="window.closeProjectModal && window.closeProjectModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="project-form">
+            <div class="modal-body">
+                <input type="hidden" id="project-edit-id">
+                <div class="form-group">
+                    <label>Project Name *</label>
+                    <input type="text" id="project-name" class="form-control" required placeholder="Enter project name">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="project-description" class="form-control" rows="3" placeholder="Project description..."></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);">
+                    <div class="form-group">
+                        <label>Progress (0-100)</label>
+                        <input type="number" id="project-progress" class="form-control" min="0" max="100" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="project-status" class="form-control" required>
+                            <option value="pending">Pending</option>
+                            <option value="active">Active</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="on-hold">On Hold</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="window.closeProjectModal && window.closeProjectModal()">Cancel</button>
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Save Project
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Milestone Creation Modal -->
+<div id="milestone-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2 id="milestone-modal-title">Add Milestone</h2>
+            <button class="icon-btn" onclick="window.closeMilestoneModal && window.closeMilestoneModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="milestone-form">
+            <div class="modal-body">
+                <input type="hidden" id="milestone-edit-id">
+                <div class="form-group">
+                    <label>Milestone Title *</label>
+                    <input type="text" id="milestone-title" class="form-control" required placeholder="Enter milestone title">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="milestone-description" class="form-control" rows="3" placeholder="Milestone description..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Due Date *</label>
+                    <input type="date" id="milestone-date" class="form-control" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="window.closeMilestoneModal && window.closeMilestoneModal()">Cancel</button>
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Save Milestone
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Invoice Modal -->
+<div id="invoice-modal" class="modal-overlay hidden" onclick="if(event.target === this) window.closeInvoiceModal && window.closeInvoiceModal();">
+    <div class="modal-content" style="max-width: 600px;" onclick="event.stopPropagation();">
+        <div class="modal-header">
+            <h2 id="invoice-modal-title">Create Invoice</h2>
+            <button type="button" class="icon-btn" id="invoice-modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="invoice-form">
+            <div class="modal-body">
+                <input type="hidden" id="invoice-edit-id">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-3);">
+                    <div class="form-group">
+                        <label>Invoice Number *</label>
+                        <input type="text" id="invoice-number" class="form-control" required placeholder="INV-001">
+                    </div>
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" id="invoice-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Project Name *</label>
+                        <input type="text" id="invoice-project" class="form-control" required placeholder="Project Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount ($) *</label>
+                        <input type="number" id="invoice-amount" class="form-control" required step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Status *</label>
+                        <select id="invoice-status" class="form-control" required>
+                            <option value="pending">Pending</option>
+                            <option value="paid">Paid</option>
+                            <option value="overdue">Overdue</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Notes (Optional)</label>
+                        <textarea id="invoice-notes" class="form-control" rows="3" placeholder="Additional notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="invoice-modal-cancel">Cancel</button>
+                <button type="submit" class="btn" id="invoice-modal-save">
+                    <i class="fas fa-save"></i> Save Invoice
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="module" src="assets/js/clients.js"></script>
+

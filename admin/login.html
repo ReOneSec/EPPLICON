@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Epplicon CMS</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/admin.css">
+    
+    <style>
+        /* Loading spinner */
+        #loading-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <!-- LOADING VIEW -->
+    <div id="loading-view">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- LOGIN VIEW -->
+    <div id="login-view" class="hidden">
+        <div class="login-card">
+            <h1>🚀 Epplicon CMS</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div id="login-error" class="alert alert-error hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="config.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
+    <script type="module">
+        // Show login view after auth check
+        import { checkAuthState } from './assets/js/auth.js';
+        
+        // Wait a moment for auth to initialize
+        setTimeout(async () => {
+            const user = await checkAuthState();
+            
+            // If user is already logged in, redirect immediately
+            if (user && window.currentAdminUser) {
+                window.location.href = 'index.html#/dashboard';
+                return;
+            }
+            
+            // Otherwise show login form
+            document.getElementById('loading-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+        }, 500);
+    </script>
+</body>
+</html>
+
