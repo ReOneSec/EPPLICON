@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal | Epplicon Technologies</title>
+
+    <meta name="description" content="Access your projects, files, invoices, and communicate with the Epplicon team.">
+    <link rel="icon" href="https://i.ibb.co/Vc8SbKH3/Picsart-25-06-12-13-49-11-841.png" type="image/png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/client-portal.css">
+    
+    <style>
+        /* Loading spinner */
+        #loading-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading View -->
+    <div id="loading-view">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app">
+        <!-- Content loaded dynamically by router -->
+    </div>
+    
+    <!-- External Scripts (for compatibility) - Invoice PDF Generator (Embedded) -->
+    <script>
+        // Invoice PDF Generator - Embedded inline to work without server uploads
+        (function() {
+            // Load html2pdf.js library dynamically
+            function loadHtml2PdfLibrary() {
+                return new Promise((resolve, reject) => {
+                    if (typeof html2pdf !== 'undefined') {
+                        resolve();
+                        return;
+                    }
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error('Failed to load html2pdf.js'));
+                    document.head.appendChild(script);
+                });
+            }
+
+            function preloadImage(url) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => resolve(url);
+                    img.onerror = () => resolve(url);
+                    img.src = url;
+                });
+            }
+
+            function formatCurrency(amount) {
+                return `$${(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function formatInvoiceDate(date) {
+                if (!date) return 'N/A';
+                if (date.toDate && typeof date.toDate === 'function') {
+                    date = date.toDate();
+                } else if (date.seconds) {
+                    date = new Date(date.seconds * 1000);
+                } else if (!(date instanceof Date)) {
+                    date = new Date(date);
+                }
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const month = monthNames[date.getMonth()];
+                const day = date.getDate();
+                const year = date.getFullYear();
+                return `${month} ${day}, ${year}`;
+            }
+
+            function calculateDueDate(invoiceDate) {
+                if (!invoiceDate) return 'N/A';
+                let date = invoiceDate;
+                if (date.toDate && typeof date.toDate === 'function') {
+                    date = date.toDate();
+                } else if (date.seconds) {
+                    date = new Date(date.seconds * 1000);
+                } else if (!(date instanceof Date)) {
+                    date = new Date(date);
+                }
+                const dueDate = new Date(date);
+                dueDate.setDate(dueDate.getDate() + 30);
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const month = monthNames[dueDate.getMonth()];
+                const day = dueDate.getDate();
+                const year = dueDate.getFullYear();
+                return `${month} ${day}, ${year}`;
+            }
+
+            function generateInvoiceHTML(invoiceData) {
+                console.log('📝 Generating HTML for invoice:', invoiceData);
+                if (!invoiceData || typeof invoiceData !== 'object') {
+                    console.error('❌ Invalid invoice data:', invoiceData);
+                    throw new Error('Invalid invoice data provided');
+                }
+                const subtotal = parseFloat(invoiceData.amount) || 0;
+                const tax = 0;
+                const total = subtotal + tax;
+                let items = [];
+                if (invoiceData.items) {
+                    if (typeof invoiceData.items === 'string') {
+                        try {
+                            items = JSON.parse(invoiceData.items);
+                        } catch (e) {
+                            console.error('❌ Error parsing items JSON:', e);
+                        }
+                    } else if (Array.isArray(invoiceData.items)) {
+                        items = invoiceData.items;
+                    }
+                }
+                if (items.length === 0) {
+                    let itemDescription = 'Service provided as per agreement';
+                    if (invoiceData.notes && invoiceData.notes.length > 15 && invoiceData.notes.length < 100 && !invoiceData.notes.includes('/') && !invoiceData.notes.match(/^\d+$/)) {
+                        itemDescription = invoiceData.notes.substring(0, 80);
+                    }
+                    items = [{
+                        name: (invoiceData.projectName || 'Professional Services').substring(0, 40),
+                        description: itemDescription,
+                        quantity: 1,
+                        unitPrice: subtotal
+                    }];
+                }
+                const clientName = invoiceData.clientName || invoiceData.clientEmail || 'Valued Client';
+                const clientEmail = invoiceData.clientEmail || '';
+                const clientAddress = invoiceData.clientAddress || '';
+                const clientPhone = invoiceData.clientPhone || '';
+                let itemsHTML = '';
+                items.forEach((item) => {
+                    const itemTotal = (item.quantity || 1) * (item.unitPrice || 0);
+                    const itemName = (item.name || 'Service').substring(0, 30);
+                    const itemDesc = (item.description || 'Service provided').substring(0, 50);
+                    itemsHTML += `<tr><td><div class="item-name">${escapeHtml(itemName)}</div></td><td><div class="item-description">${escapeHtml(itemDesc)}</div></td><td style="text-align: center;">${item.quantity || 1}</td><td style="text-align: right;">${formatCurrency(item.unitPrice || 0)}</td><td style="text-align: right;">${formatCurrency(itemTotal)}</td></tr>`;
+                });
+                return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins',sans-serif;background:white;color:#2d3748;line-height:1.6}.invoice-container{width:210mm;min-height:297mm;max-height:297mm;padding:5mm;background:white;box-sizing:border-box;overflow:visible;margin:0;position:relative;page-break-inside:avoid!important;break-inside:avoid!important}.invoice-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #667eea;gap:8px;width:100%;flex-wrap:nowrap}.company-info{flex:1;min-width:0;max-width:65%;overflow:visible}.company-logo{width:140px;height:auto;margin-bottom:8px;max-width:90%;object-fit:contain}.company-name{font-size:20px;font-weight:700;color:#2d3748;margin-bottom:4px;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;line-height:1.1;max-width:100%}.company-email{font-size:13px;color:#667eea;font-weight:500;margin-bottom:8px}.biller-info{font-size:11px;color:#718096;line-height:1.5;margin-top:5px}.biller-info p{margin:3px 0;font-size:11px}.biller-info strong{color:#2d3748;font-weight:600}.invoice-title-section{flex-shrink:0}.invoice-title{font-size:26px;font-weight:700;color:#667eea;text-align:right;white-space:nowrap;flex-shrink:0;margin:0;line-height:1;padding-left:10px}.invoice-details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}.detail-section{background:#f7fafc;padding:12px;border-radius:8px;border-left:4px solid #667eea;overflow:visible}.detail-section h3{font-size:12px;font-weight:600;color:#667eea;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}.detail-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px;gap:8px}.detail-label{color:#718096;font-weight:500;flex-shrink:0;min-width:80px}.detail-value{color:#2d3748;font-weight:600;text-align:right;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;max-width:45%;flex-shrink:1;overflow:hidden;text-overflow:ellipsis}.client-section{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:15px;border-radius:8px;color:white;margin-bottom:20px}.client-section h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;opacity:0.9}.client-section p{font-size:13px;line-height:1.5;margin-bottom:4px}.client-name{font-size:16px!important;font-weight:600;margin-bottom:8px!important}.items-table{width:100%;border-collapse:collapse;margin-bottom:20px;border-radius:0;overflow:visible;table-layout:fixed;font-size:11px}.items-table thead{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white}.items-table th{padding:8px 5px;text-align:left;font-weight:600;font-size:9px;text-transform:uppercase;letter-spacing:0.2px;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;line-height:1.2;overflow:visible}.items-table th:nth-child(1){width:20%;min-width:20%}.items-table th:nth-child(2){width:35%;min-width:35%}.items-table th:nth-child(3){width:8%;min-width:8%;text-align:center}.items-table th:nth-child(4){width:18.5%;min-width:18.5%;text-align:right}.items-table th:nth-child(5){width:18.5%;min-width:18.5%;text-align:right}.items-table th:last-child,.items-table td:last-child{text-align:right}.items-table td:nth-child(3){text-align:center}.items-table td:nth-child(4),.items-table td:nth-child(5){text-align:right}.items-table tbody tr{border-bottom:1px solid #e2e8f0}.items-table tbody tr:last-child{border-bottom:none}.items-table td{padding:10px 5px;font-size:11px;word-wrap:break-word;overflow-wrap:break-word;vertical-align:top;line-height:1.4;overflow:visible}.item-name{font-weight:600;color:#2d3748;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;font-size:11px;line-height:1.2}.item-description{color:#718096;font-size:9px;margin-top:2px;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;line-height:1.2}.totals-section{margin-left:auto;width:280px;background:#f7fafc;padding:15px;border-radius:8px;margin-bottom:20px}.total-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px}.total-label{color:#718096;font-weight:500}.total-value{color:#2d3748;font-weight:600}.grand-total-row{margin-top:15px;padding-top:15px;border-top:2px solid #667eea}.grand-total-row .total-label{font-size:16px;color:#2d3748;font-weight:700}.grand-total-row .total-value{font-size:20px;color:#667eea;font-weight:700}.invoice-footer{text-align:left;padding-top:12px;border-top:2px solid #e2e8f0;margin-top:12px;width:100%;overflow:visible;max-width:100%}.footer-message{color:#718096;font-size:11px;line-height:1.5;margin-bottom:8px;word-wrap:break-word;overflow-wrap:break-word;white-space:normal;width:100%;max-width:100%}.footer-contact{color:#667eea;font-weight:600;font-size:11px;word-wrap:break-word;overflow-wrap:break-word;width:100%;max-width:100%}</style></head><body><div class="invoice-container"><div class="invoice-header"><div class="company-info"><img src="https://i.ibb.co/bgx4ddTy/Picsart-25-06-12-13-49-11-841.png" alt="Epplicon Technologies" class="company-logo" crossorigin="anonymous"><div class="company-name">Epplicon Technologies</div><div class="company-email"><a href="mailto:info@epplicon.net" style="color:#667eea;text-decoration:none">info@epplicon.net</a></div><div class="biller-info">${invoiceData.billerWhatsApp?`<p><strong>WhatsApp:</strong> ${escapeHtml(invoiceData.billerWhatsApp)}</p>`:''}<p><strong>Website:</strong> <a href="https://www.epplicon.net" style="color:#667eea;text-decoration:none">www.epplicon.net</a></p></div></div><div class="invoice-title-section"><div class="invoice-title">INVOICE</div></div></div><div class="invoice-details"><div class="detail-section"><h3>Invoice Information</h3><div class="detail-row"><span class="detail-label">Invoice #:</span><span class="detail-value">${escapeHtml((invoiceData.invoiceNumber||'N/A').substring(0,12))}</span></div><div class="detail-row"><span class="detail-label">Invoice Date:</span><span class="detail-value">${formatInvoiceDate(invoiceData.date)}</span></div><div class="detail-row"><span class="detail-label">Due Date:</span><span class="detail-value">${calculateDueDate(invoiceData.date)}</span></div></div><div class="detail-section"><h3>Payment Information</h3><div class="detail-row"><span class="detail-label">Status:</span><span class="detail-value">${(invoiceData.status||'pending').toUpperCase()}</span></div><div class="detail-row"><span class="detail-label">Project:</span><span class="detail-value">${escapeHtml((invoiceData.projectName||'General').substring(0,20))}</span></div></div></div><div class="client-section"><h3>Bill To</h3><p class="client-name">${escapeHtml(clientName.substring(0,40))}</p>${clientAddress?`<p>${escapeHtml(clientAddress.substring(0,50))}</p>`:''}${clientEmail?`<p>Email: ${escapeHtml(clientEmail.substring(0,40))}</p>`:''}${clientPhone?`<p>Phone: ${escapeHtml(clientPhone.substring(0,25))}</p>`:''}</div><table class="items-table"><thead><tr><th>Item</th><th>Description</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody>${itemsHTML}</tbody></table><div class="totals-section"><div class="total-row"><span class="total-label">Subtotal:</span><span class="total-value">${formatCurrency(subtotal)}</span></div><div class="total-row"><span class="total-label">Tax (0%):</span><span class="total-value">${formatCurrency(tax)}</span></div><div class="total-row grand-total-row"><span class="total-label">Grand Total:</span><span class="total-value">${formatCurrency(total)}</span></div></div><div class="invoice-footer"><p class="footer-message">${invoiceData.notes&&invoiceData.notes.length>20&&!invoiceData.notes.includes('/')?escapeHtml(invoiceData.notes.substring(0,150)):'Thank you for your business! Payment is due within 30 days. Please make checks payable to Epplicon Technologies and include the invoice number on your payment.'}</p><p class="footer-contact">For any queries, contact us at info@epplicon.net</p></div></div></body></html>`.trim();
+            }
+
+            async function fetchAnyAdmin() {
+                try {
+                    let firestoreDb = window.adminDB || window.db || (typeof db !== 'undefined' ? db : null);
+                    if (!firestoreDb) return null;
+                    if (window.collection && window.getDocs && window.query && window.limit) {
+                        const { collection, getDocs, query, limit } = window;
+                        const authorsQuery = query(collection(firestoreDb, 'authors'), limit(1));
+                        const authorsSnapshot = await getDocs(authorsQuery);
+                        if (!authorsSnapshot.empty) {
+                            const authorData = authorsSnapshot.docs[0].data();
+                            return {
+                                billerName: authorData.name || authorData.displayName || 'Epplicon Team',
+                                billerEmail: authorData.email || 'info@epplicon.net',
+                                billerWhatsApp: authorData.whatsappNumber || authorData.phone || authorData.whatsapp || ''
+                            };
+                        }
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Could not fetch any admin:', error);
+                }
+                return null;
+            }
+
+            async function fetchBillerDetails(userUid, email) {
+                try {
+                    let firestoreDb = window.adminDB || window.db || (typeof db !== 'undefined' ? db : null);
+                    if (!firestoreDb) return null;
+                    if (window.getDoc && window.doc && userUid) {
+                        const authorRef = window.doc(firestoreDb, 'authors', userUid);
+                        const authorSnap = await window.getDoc(authorRef);
+                        if (authorSnap.exists()) {
+                            const authorData = authorSnap.data();
+                            return {
+                                billerName: authorData.name || authorData.displayName || 'Epplicon Team',
+                                billerEmail: authorData.email || email || 'info@epplicon.net',
+                                billerWhatsApp: authorData.whatsappNumber || authorData.phone || authorData.whatsapp || ''
+                            };
+                        }
+                    }
+                    if (email && window.query && window.where && window.collection && window.getDocs) {
+                        const { query, where, collection, getDocs } = window;
+                        const authorsQuery = query(collection(firestoreDb, 'authors'), where('email', '==', email));
+                        const authorsSnapshot = await getDocs(authorsQuery);
+                        if (!authorsSnapshot.empty) {
+                            const authorData = authorsSnapshot.docs[0].data();
+                            return {
+                                billerName: authorData.name || authorData.displayName || 'Epplicon Team',
+                                billerEmail: authorData.email || email || 'info@epplicon.net',
+                                billerWhatsApp: authorData.whatsappNumber || authorData.phone || authorData.whatsapp || ''
+                            };
+                        }
+                    }
+                    return await fetchAnyAdmin();
+                } catch (error) {
+                    console.warn('⚠️ Could not fetch biller details:', error);
+                    return null;
+                }
+            }
+
+            async function fetchClientDetails(clientId) {
+                try {
+                    if (typeof db === 'undefined' || !db) return null;
+                    if (window.collection && window.query && window.where && window.getDocs) {
+                        const { collection, query, where, getDocs } = window;
+                        const clientsQuery = query(collection(db, 'clients'), where('uid', '==', clientId));
+                        const clientsSnapshot = await getDocs(clientsQuery);
+                        if (!clientsSnapshot.empty) {
+                            const clientData = clientsSnapshot.docs[0].data();
+                            return {
+                                clientName: clientData.name || clientData.email || 'Valued Client',
+                                clientEmail: clientData.email || '',
+                                clientAddress: clientData.address || '',
+                                clientPhone: clientData.whatsappNumber ? `${clientData.countryCode || ''} ${clientData.whatsappNumber}`.trim() : clientData.phone || ''
+                            };
+                        }
+                    }
+                } catch (error) {
+                    console.error('❌ Error fetching client details:', error);
+                }
+                return null;
+            }
+
+            async function generateInvoicePDF(invoiceData, buttonElement) {
+                let originalHTML = '';
+                let enrichedInvoiceData = null;
+                if (buttonElement) {
+                    originalHTML = buttonElement.innerHTML;
+                    buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                    buttonElement.disabled = true;
+                }
+                try {
+                    console.log('📄 Starting PDF generation...');
+                    if (!invoiceData) throw new Error('No invoice data provided');
+                    await loadHtml2PdfLibrary();
+                    enrichedInvoiceData = { ...invoiceData };
+                    if (!enrichedInvoiceData.invoiceNumber) {
+                        enrichedInvoiceData.invoiceNumber = enrichedInvoiceData.id ? enrichedInvoiceData.id.substring(0, 8).toUpperCase() : 'DRAFT';
+                    }
+                    if (!enrichedInvoiceData.projectName) enrichedInvoiceData.projectName = 'Professional Services';
+                    if (!enrichedInvoiceData.date) enrichedInvoiceData.date = new Date();
+                    if (!enrichedInvoiceData.clientName && enrichedInvoiceData.clientId) {
+                        try {
+                            const clientDetails = await fetchClientDetails(enrichedInvoiceData.clientId);
+                            if (clientDetails) enrichedInvoiceData = { ...enrichedInvoiceData, ...clientDetails };
+                        } catch (e) {}
+                    }
+                    if (!enrichedInvoiceData.clientName) {
+                        if (typeof currentUser !== 'undefined' && currentUser && currentUser.email) {
+                            enrichedInvoiceData.clientName = currentUser.displayName || currentUser.email;
+                            enrichedInvoiceData.clientEmail = currentUser.email;
+                        } else if (typeof selectedClientData !== 'undefined' && selectedClientData) {
+                            enrichedInvoiceData.clientName = selectedClientData.name || selectedClientData.email || 'Valued Client';
+                            enrichedInvoiceData.clientEmail = selectedClientData.email || '';
+                        } else {
+                            enrichedInvoiceData.clientName = 'Valued Client';
+                            enrichedInvoiceData.clientEmail = '';
+                        }
+                    }
+                    if (!enrichedInvoiceData.billerName || !enrichedInvoiceData.billerEmail) {
+                        let adminUser = window.currentAdminUser || (typeof currentUser !== 'undefined' ? currentUser : null);
+                        let adminUid = adminUser?.uid;
+                        let adminEmail = adminUser?.email;
+                        if (adminUid || adminEmail) {
+                            try {
+                                const billerDetails = await fetchBillerDetails(adminUid, adminEmail);
+                                if (billerDetails) {
+                                    enrichedInvoiceData.billerName = billerDetails.billerName;
+                                    enrichedInvoiceData.billerEmail = billerDetails.billerEmail;
+                                    enrichedInvoiceData.billerWhatsApp = billerDetails.billerWhatsApp;
+                                } else {
+                                    enrichedInvoiceData.billerName = adminUser?.displayName || adminUser?.name || 'Epplicon Team';
+                                    enrichedInvoiceData.billerEmail = adminEmail || 'info@epplicon.net';
+                                    enrichedInvoiceData.billerWhatsApp = '';
+                                }
+                            } catch (e) {
+                                const anyAdmin = await fetchAnyAdmin();
+                                if (anyAdmin) {
+                                    enrichedInvoiceData.billerName = anyAdmin.billerName;
+                                    enrichedInvoiceData.billerEmail = anyAdmin.billerEmail;
+                                    enrichedInvoiceData.billerWhatsApp = anyAdmin.billerWhatsApp;
+                                } else {
+                                    enrichedInvoiceData.billerName = 'Epplicon Team';
+                                    enrichedInvoiceData.billerEmail = 'info@epplicon.net';
+                                    enrichedInvoiceData.billerWhatsApp = '';
+                                }
+                            }
+                        } else {
+                            const anyAdmin = await fetchAnyAdmin();
+                            if (anyAdmin) {
+                                enrichedInvoiceData.billerName = anyAdmin.billerName;
+                                enrichedInvoiceData.billerEmail = anyAdmin.billerEmail;
+                                enrichedInvoiceData.billerWhatsApp = anyAdmin.billerWhatsApp;
+                            } else {
+                                enrichedInvoiceData.billerName = 'Epplicon Team';
+                                enrichedInvoiceData.billerEmail = 'info@epplicon.net';
+                                enrichedInvoiceData.billerWhatsApp = '';
+                            }
+                        }
+                    }
+                    await preloadImage('https://i.ibb.co/bgx4ddTy/Picsart-25-06-12-13-49-11-841.png');
+                    const htmlContent = generateInvoiceHTML(enrichedInvoiceData);
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlContent, 'text/html');
+                    const invoiceContainerFromDoc = doc.querySelector('.invoice-container');
+                    if (!invoiceContainerFromDoc) throw new Error('Invoice container not found');
+                    const tempContainer = document.createElement('div');
+                    tempContainer.id = 'pdf-temp-container-' + Date.now();
+                    tempContainer.style.cssText = 'position:fixed;top:0;left:0;width:794px;min-height:1123px;background:white;z-index:99999;overflow:visible;pointer-events:none;opacity:0';
+                    const styles = doc.querySelectorAll('style');
+                    styles.forEach(style => {
+                        const styleElement = document.createElement('style');
+                        styleElement.textContent = style.textContent;
+                        tempContainer.appendChild(styleElement);
+                    });
+                    const invoiceElement = invoiceContainerFromDoc.cloneNode(true);
+                    tempContainer.appendChild(invoiceElement);
+                    document.body.appendChild(tempContainer);
+                    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+                    const images = invoiceElement.querySelectorAll('img');
+                    if (images.length > 0) {
+                        await Promise.all(Array.from(images).map(img => {
+                            if (img.complete) return Promise.resolve();
+                            return new Promise(resolve => {
+                                img.onload = resolve;
+                                img.onerror = resolve;
+                                setTimeout(resolve, 3000);
+                            });
+                        }));
+                    }
+                    void invoiceElement.offsetHeight;
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    const opt = {
+                        margin: [0, 0, 0, 0],
+                        filename: `Invoice-${enrichedInvoiceData.invoiceNumber || 'draft'}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: {
+                            scale: 2,
+                            useCORS: true,
+                            letterRendering: true,
+                            logging: false,
+                            allowTaint: false,
+                            backgroundColor: '#ffffff',
+                            width: invoiceElement.scrollWidth || 794,
+                            height: invoiceElement.scrollHeight || 1123,
+                            windowWidth: invoiceElement.scrollWidth || 794,
+                            windowHeight: invoiceElement.scrollHeight || 1123,
+                            x: 0, y: 0, scrollX: 0, scrollY: 0
+                        },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+                        pagebreak: { mode: ['avoid-all', 'css'], avoid: ['.invoice-container', '.invoice-header', '.client-section', '.items-table', '.totals-section'] }
+                    };
+                    tempContainer.style.opacity = '1';
+                    invoiceElement.style.cssText = 'opacity:1;position:relative;visibility:visible;display:block;width:100%;max-width:100%';
+                    void tempContainer.offsetHeight;
+                    void invoiceElement.offsetHeight;
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    if (invoiceElement.offsetWidth < 700) {
+                        invoiceElement.style.width = '794px';
+                        invoiceElement.style.minWidth = '794px';
+                    }
+                    await html2pdf().set(opt).from(invoiceElement).save();
+                    if (tempContainer && tempContainer.parentNode) document.body.removeChild(tempContainer);
+                    if (typeof showNotification === 'function') {
+                        showNotification('✅ Invoice PDF downloaded successfully!', 'success');
+                    } else if (typeof showToast === 'function') {
+                        showToast('✅ Invoice PDF downloaded successfully!', 'success');
+                    }
+                } catch (error) {
+                    console.error('❌ Error generating PDF:', error);
+                    const errorMessage = 'Error generating PDF: ' + error.message;
+                    if (typeof showNotification === 'function') {
+                        showNotification(errorMessage, 'error');
+                    } else if (typeof showToast === 'function') {
+                        showToast(errorMessage, 'error');
+                    } else {
+                        alert(errorMessage);
+                    }
+                } finally {
+                    if (buttonElement) {
+                        buttonElement.innerHTML = originalHTML || '<i class="fas fa-file-pdf"></i> Download PDF';
+                        buttonElement.disabled = false;
+                    }
+                }
+            }
+
+            window.generateInvoicePDF = generateInvoicePDF;
+            window.loadHtml2PdfLibrary = loadHtml2PdfLibrary;
+            console.log('✅ Invoice PDF Generator loaded successfully (embedded)');
+            console.log('   - generateInvoicePDF:', typeof window.generateInvoicePDF);
+            window.dispatchEvent(new CustomEvent('pdfGeneratorLoaded'));
+        })();
+    </script>
+    
+    <!-- Shared Scripts -->
+    <!-- Load order: config -> shared -> auth -> router -->
+    <!-- Both shared.js and auth.js use getApp('main') to share the same Firebase app instance -->
+    <script type="module" src="config.js"></script>
+    <script type="module" src="assets/js/shared.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
+    <script type="module" src="assets/js/router.js"></script>
+    
+    <script type="module">
+        // Hide loading when router is ready
+        window.addEventListener('pageLoaded', () => {
+            const loadingView = document.getElementById('loading-view');
+            if (loadingView) {
+                loadingView.classList.add('hidden');
+            }
+        });
+        
+        // Also hide loading after a timeout (fallback)
+        setTimeout(() => {
+            const loadingView = document.getElementById('loading-view');
+            if (loadingView) {
+                loadingView.classList.add('hidden');
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
+
