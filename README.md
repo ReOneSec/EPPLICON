@@ -73,7 +73,7 @@ epplicon/
 │       └── client-portal.js          # Client portal logic
 ├── img/              # Images
 ├── admin.html        # Admin panel
-├── client-portal.html # Client portal
+├── client/ # Client portal
 ├── index.html        # Main website
 ├── config.js         # Firebase configuration (not in repo)
 ├── config.example.js # Configuration template
@@ -90,7 +90,7 @@ epplicon/
 ## 📝 Usage
 
 ### For Clients
-1. Navigate to `client-portal.html`
+1. Navigate to `client/`
 2. Register or login with your credentials
 3. Access your dashboard, projects, invoices, and files
 4. Download invoices as PDF directly from the portal

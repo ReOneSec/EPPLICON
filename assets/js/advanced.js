@@ -141,41 +141,78 @@
     // --- CONTACT FORM ---
     function initContactForm() {
         const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('form-status');
         
         if (contactForm) {
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
                 const submitBtn = contactForm.querySelector('.form-submit');
-                const originalText = submitBtn.innerHTML;
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnLoader = submitBtn.querySelector('.btn-loader');
                 
                 // Validate form
                 if (!validateForm(contactForm)) {
                     return;
                 }
                 
+                // Hide previous status
+                if (formStatus) {
+                    formStatus.style.display = 'none';
+                    formStatus.className = 'form-status';
+                }
+                
                 // Show loading state
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="form-loading"></span> Sending...';
+                if (btnText) btnText.style.display = 'none';
+                if (btnLoader) btnLoader.style.display = 'inline-block';
                 
                 // Get form data
                 const formData = new FormData(contactForm);
-                const data = Object.fromEntries(formData);
                 
                 try {
-                    // Simulate API call (replace with actual endpoint)
-                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    // Submit to Web3Forms
+                    const response = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        body: formData
+                    });
                     
-                    // Success
-                    showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
-                    contactForm.reset();
-                    clearFormErrors(contactForm);
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Success
+                        if (formStatus) {
+                            formStatus.textContent = 'Thank you! Your message has been sent successfully. We\'ll get back to you soon.';
+                            formStatus.className = 'form-status success';
+                            formStatus.style.display = 'block';
+                        }
+                        showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
+                        contactForm.reset();
+                        clearFormErrors(contactForm);
+                        
+                        // Scroll to status message
+                        if (formStatus) {
+                            formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    } else {
+                        throw new Error(result.message || 'Failed to send message');
+                    }
                     
                 } catch (error) {
-                    showToast('Failed to send message. Please try again.', 'error');
+                    console.error('Form submission error:', error);
+                    const errorMessage = error.message || 'Failed to send message. Please try again or contact us directly at info@epplicon.net';
+                    
+                    if (formStatus) {
+                        formStatus.textContent = errorMessage;
+                        formStatus.className = 'form-status error';
+                        formStatus.style.display = 'block';
+                    }
+                    showToast(errorMessage, 'error');
                 } finally {
+                    // Reset button state
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
+                    if (btnText) btnText.style.display = 'inline';
+                    if (btnLoader) btnLoader.style.display = 'none';
                 }
             });
             

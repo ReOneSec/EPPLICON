@@ -127,5 +127,5 @@ Each page has its own module that initializes when the page loads:
 
 ---
 
-**Note**: The old `client-portal.html` file is still in the root directory. Once you've verified the new structure works, you can delete or rename it.
+**Note**: The client portal is now located in the `client/` directory. Access it via `client/` or `client/index.html`.
 

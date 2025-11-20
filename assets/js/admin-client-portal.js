@@ -258,7 +258,7 @@ async function loadClients() {
                 <div style="text-align: center; padding: 2rem;">
                     <i class="fas fa-users" style="font-size: 3rem; color: var(--text-secondary); opacity: 0.3;"></i>
                     <p>No clients found. Clients will appear here after they register.</p>
-                    <a href="client-portal.html" target="_blank" class="btn" style="margin-top: 1rem;">
+                    <a href="client/" target="_blank" class="btn" style="margin-top: 1rem;">
                         Open Client Portal
                     </a>
                 </div>

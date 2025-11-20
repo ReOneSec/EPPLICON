@@ -23,8 +23,8 @@
                     <a href="portfolio.html" data-page="portfolio.html">Portfolio</a>
                     <a href="about.html" data-page="about.html">About</a>
                     <a href="blog.html" data-page="blog.html">Blog</a>
-                    <a href="client-portal.html" class="client-portal-link" id="clientPortalLink" style="display: none;">Client Portal</a>
-                    <a href="client-portal.html" class="client-login-btn" id="clientLoginBtn">Client Login</a>
+                    <a href="client/" class="client-portal-link" id="clientPortalLink" style="display: none;">Client Portal</a>
+                    <a href="client/" class="client-login-btn" id="clientLoginBtn">Client Login</a>
                     <a href="index.html#contact" class="contact-btn">Contact</a>
                 </nav>
                 <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobileNav">
@@ -40,8 +40,8 @@
             <a href="portfolio.html" data-page="portfolio.html">Portfolio</a>
             <a href="about.html" data-page="about.html">About</a>
             <a href="blog.html" data-page="blog.html">Blog</a>
-            <a href="client-portal.html" class="client-portal-link" id="clientPortalLinkMobile" style="display: none;">Client Portal</a>
-            <a href="client-portal.html" class="client-login-btn" id="clientLoginBtnMobile">Client Login</a>
+            <a href="client/" class="client-portal-link" id="clientPortalLinkMobile" style="display: none;">Client Portal</a>
+            <a href="client/" class="client-login-btn" id="clientLoginBtnMobile">Client Login</a>
             <a href="index.html#contact">Contact</a>
         </nav>
     `;

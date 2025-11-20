@@ -34,15 +34,28 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const statNumber = entry.target.querySelector('.stat-number');
-                    if (statNumber && !statNumber.classList.contains('animated')) {
-                        statNumber.classList.add('animated');
-                        animateCounter(statNumber);
+                    const statCard = entry.target.closest('.stat-card');
+                    if (statCard) {
+                        const statNumber = statCard.querySelector('.stat-number');
+                        const progressFill = statCard.querySelector('.stat-progress-fill');
+                        
+                        if (statNumber && !statNumber.classList.contains('animated')) {
+                            statNumber.classList.add('animated');
+                            animateCounter(statNumber);
+                        }
+                        
+                        if (progressFill && !progressFill.classList.contains('animated')) {
+                            progressFill.classList.add('animated');
+                            const progress = parseInt(progressFill.getAttribute('data-progress')) || 0;
+                            setTimeout(() => {
+                                progressFill.style.width = progress + '%';
+                            }, 500);
+                        }
                     }
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.3 });
         
         document.querySelectorAll('.stat-card').forEach(card => {
             observer.observe(card);

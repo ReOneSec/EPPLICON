@@ -72,7 +72,7 @@
 
 ## Summary
 
-**All code has been successfully migrated from `client-portal.html` to the modular `client-portal/` folder structure.**
+**All code has been successfully migrated from `client-portal.html` to the modular `client/` folder structure.**
 
 ### Migration Status: ✅ Complete
 
