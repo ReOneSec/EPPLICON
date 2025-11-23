@@ -4,6 +4,7 @@
  */
 
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp, onSnapshot, Timestamp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+import { ref, listAll, getDownloadURL, getMetadata } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js';
 
 // Basic client list loader
 window.loadClients = async function() {
@@ -1296,9 +1297,16 @@ window.deleteMilestone = async function(milestoneId) {
 };
 
 // Load client files
-async function loadClientFiles(clientId) {
-    const db = window.db || window.adminDB;
-    if (!db) return;
+async function loadClientFiles(clientUID) {
+    const storage = window.storage || window.adminStorage;
+    if (!storage) {
+        console.error('Storage not available');
+        const list = document.getElementById('client-files-list');
+        if (list) {
+            list.innerHTML = '<p style="color: var(--gray-500); text-align: center; padding: var(--space-4);">Storage not initialized.</p>';
+        }
+        return;
+    }
     
     const list = document.getElementById('client-files-list');
     if (!list) return;
@@ -1306,38 +1314,69 @@ async function loadClientFiles(clientId) {
     list.innerHTML = '<div class="spinner"></div>';
     
     try {
-        // Files collection might not exist yet, handle gracefully
-        const q = query(collection(db, 'files'), where('clientId', '==', clientId));
-        const snapshot = await getDocs(q);
+        // Load files from Storage (same path as admin-client-portal.js uses)
+        const filesRef = ref(storage, `clients/${clientUID}`);
+        const result = await listAll(filesRef);
         
-        if (snapshot.empty) {
+        if (result.items.length === 0) {
             list.innerHTML = '<p style="color: var(--gray-500); text-align: center; padding: var(--space-4);">No files uploaded yet.</p>';
             return;
         }
         
         list.innerHTML = '';
-        snapshot.forEach(docSnap => {
-            const file = docSnap.data();
-            const item = document.createElement('div');
-            item.className = 'post-item';
-            item.innerHTML = `
-                <div class="stat-icon" style="background: var(--info); opacity: 1;">
-                    <i class="fas fa-file" style="color: var(--white); opacity: 1;"></i>
-                </div>
-                <div class="post-content">
-                    <div class="post-title">${file.name || 'Unnamed File'}</div>
-                    <div class="post-meta">${file.size || 'Unknown size'} • ${file.uploadedAt ? new Date(file.uploadedAt.seconds * 1000).toLocaleDateString() : 'N/A'}</div>
-                </div>
-                <a href="${file.url || '#'}" target="_blank" class="btn btn-sm">
-                    <i class="fas fa-download"></i> Download
-                </a>
-            `;
-            list.appendChild(item);
-        });
+        
+        // Load each file's metadata and URL
+        for (const itemRef of result.items) {
+            try {
+                const [url, metadata] = await Promise.all([
+                    getDownloadURL(itemRef),
+                    getMetadata(itemRef)
+                ]);
+                
+                const fileSize = metadata.size ? formatFileSize(metadata.size) : 'Unknown size';
+                const uploadDate = metadata.timeCreated ? new Date(metadata.timeCreated).toLocaleDateString() : 'N/A';
+                
+                const fileItem = document.createElement('div');
+                fileItem.className = 'post-item';
+                fileItem.innerHTML = `
+                    <div class="stat-icon" style="background: var(--info); opacity: 1;">
+                        <i class="fas fa-file" style="color: var(--white); opacity: 1;"></i>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-title">${escapeHtml(itemRef.name)}</div>
+                        <div class="post-meta">${fileSize} • ${uploadDate}</div>
+                    </div>
+                    <a href="${url}" target="_blank" class="btn btn-sm">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                `;
+                list.appendChild(fileItem);
+            } catch (fileError) {
+                console.warn('Error loading file:', itemRef.name, fileError);
+            }
+        }
+        
+        if (list.children.length === 0) {
+            list.innerHTML = '<p style="color: var(--gray-500); text-align: center; padding: var(--space-4);">No accessible files.</p>';
+        }
     } catch (error) {
         console.error('Error loading files:', error);
-        list.innerHTML = '<p style="color: var(--gray-500); text-align: center; padding: var(--space-4);">No files uploaded yet.</p>';
+        // If the folder doesn't exist, show empty state
+        if (error.code === 'storage/object-not-found' || error.code === 'storage/unauthorized') {
+            list.innerHTML = '<p style="color: var(--gray-500); text-align: center; padding: var(--space-4);">No files uploaded yet.</p>';
+        } else {
+            list.innerHTML = `<p style="color: var(--danger); text-align: center; padding: var(--space-4);">Error loading files: ${error.message}</p>`;
+        }
     }
+}
+
+// Helper function to format file size
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
 }
 
 // Load client milestones

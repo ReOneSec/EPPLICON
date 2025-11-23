@@ -129,6 +129,12 @@ onAuthStateChanged(auth, async (user) => {
 window.adminLogin = async (email, password) => {
     try {
         await signInWithEmailAndPassword(auth, email, password);
+        
+        // Also authenticate in Storage project for cross-project access
+        if (window.syncAuthToStorage) {
+            await window.syncAuthToStorage(email, password);
+        }
+        
         return { success: true };
     } catch (error) {
         return { success: false, error: error.message };

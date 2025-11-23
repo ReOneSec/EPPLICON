@@ -2,7 +2,7 @@
  * Files Page Module
  */
 
-import { ref as storageRef, listAll, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js';
+import { ref, listAll, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js';
 
 // Load files
 window.loadFiles = async function() {
@@ -19,7 +19,7 @@ window.loadFiles = async function() {
     container.innerHTML = '<div class="spinner"></div>';
     
     try {
-        const filesRef = storageRef(storage, `clients/${clientId}`);
+        const filesRef = ref(storage, `clients/${clientId}`);
         const result = await listAll(filesRef);
         
         if (result.items.length === 0) {

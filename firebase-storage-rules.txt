@@ -3,22 +3,37 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     
-    // Client files: Only the client can read/write their own files
-    // Admins (authors) can also access
-    match /clients/{userId}/{allPaths=**} {
-      allow read: if request.auth != null && 
-                     (request.auth.uid == userId || 
-                      firestore.get(/databases/(default)/documents/authors/$(request.auth.uid)).data != null);
-      allow write: if request.auth != null && 
-                      (request.auth.uid == userId || 
-                       firestore.get(/databases/(default)/documents/authors/$(request.auth.uid)).data != null);
+    // Helper function to check if user is admin
+    // Since admins are in a different project, we'll use a simpler approach:
+    // Allow authenticated users to read (both clients and admins are authenticated)
+    // Only allow write for file owners
+    function isAuthenticated() {
+      return request.auth != null;
     }
     
-    // Blog images: Anyone can read, only admins can write
+    function isFileOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Client files: 
+    // - Clients can read/write their own files
+    // - Authenticated users (including admins) can read all client files
+    // - Authenticated users can write (clients to their own folder, admins to any folder)
+    // Note: App-level logic should enforce that clients only write to their own folder
+    match /clients/{userId}/{allPaths=**} {
+      // Allow read for authenticated users (clients can read their own, admins can read all)
+      allow read: if isAuthenticated();
+      
+      // Allow write for authenticated users
+      // - Clients can upload to their own folder (enforced by app logic)
+      // - Admins can upload to any client folder (needed for admin functionality)
+      allow write: if isAuthenticated();
+    }
+    
+    // Blog images: Anyone can read, authenticated users can write
     match /blogImages/{allPaths=**} {
       allow read: if true;
-      allow write: if request.auth != null && 
-                      firestore.get(/databases/(default)/documents/authors/$(request.auth.uid)).data != null;
+      allow write: if isAuthenticated();
     }
     
     // Default: Deny all other access

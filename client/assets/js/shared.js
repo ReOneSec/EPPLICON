@@ -5,6 +5,7 @@
 import { initializeApp, getApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
 import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, query, orderBy, where, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 import { getStorage, ref as storageRef, listAll, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js';
+import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
 // Import from client-portal config.js
 import { firebaseConfig_DB_AUTH, firebaseConfig_STORAGE } from '../config.js';
 
@@ -27,6 +28,27 @@ try {
 
 const db = getFirestore(app1);
 const storage = getStorage(app2);
+
+// Set up cross-project authentication for Storage
+const storageAuth = getAuth(app2);
+
+// Function to sync authentication to Storage project
+window.syncAuthToStorage = async function(email, password) {
+    if (!email || !password) {
+        console.warn('Cannot sync auth to Storage: email/password not provided');
+        return;
+    }
+    
+    try {
+        // Sign in to Storage project with same credentials
+        await signInWithEmailAndPassword(storageAuth, email, password);
+        console.log('Successfully authenticated in Storage project');
+    } catch (error) {
+        // If user doesn't exist in Storage project, that's okay
+        // The Storage rules will handle it
+        console.warn('Could not authenticate in Storage project (user may not exist there):', error.message);
+    }
+};
 
 // Expose to window for compatibility
 if (!window.db) {
